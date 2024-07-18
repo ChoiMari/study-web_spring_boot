@@ -1,0 +1,23 @@
+<!DOCTYPE html> <!-- html 조각 jsp의 jspf 같은 개념 -->
+<html xmlns:th="http://www.thymeleaf.org">
+	<body>
+		<!-- 다음 HTML 파일들에서 공통으로 사용할 프래그먼트들을 정의 -->
+        <header th:fragment="myHeader(title)"> <!-- 함수이름myHeader(파라미터title) -->
+            <!-- 파라미터 변수 표현식 태그 안에 th:text="${}" -->
+            <h1 th:text="${title}">HEADER</h1> <!-- title이라는 변수의 값이 여는태그와 닫힌태그 자리에 들어감.
+                화면에 HEADER대신에 Home Page라고 그려짐
+             -->
+        </header>
+        
+        <nav th:fragment="navigation">
+            <ul>
+                <li>Home</li>
+                <li>두번째 페이지</li>
+                <li>세번째 페이지</li>
+            </ul>
+        </nav>
+        
+    
+        
+	</body>
+</html>

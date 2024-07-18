@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Spring Boot 1</title>
+	</head>
+	<body>
+		<!-- templatas/layout/fragments.html 파일의 myHeader 프래그먼트 끼워넣기 -->
+         <div th:replace="~{/layout/fragments :: myHeader('도서 목록 페이지')}"></div>
+         
+         <!-- ${...} : Variable expressions. -->
+     <!--    <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>제목</th>
+                    <th>저자</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!-- 반복문 자바의 향상된 for문과 비슷하다고 보면 됨 -->
+            <!--         <tr th:each="book : ${bookList}">
+                        <td th:text="${book.id}"></td>
+                        <td th:text="${book.title}"></td>
+                        <td th:text="|${book.author.firstName} ${book.author.lastName}|"></td>
+                    </tr>
+            </tbody>
+         </table> -->
+         
+         <br />
+         
+         <!-- *{...} : Selection expressions.선택 표현식 -->
+           <!--    <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>제목</th>
+                    <th>저자</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!-- 반복문 자바의 향상된 for문과 비슷하다고 보면 됨 -->
+             <!--          <tr th:each="book : ${bookList}" th:object="${book}">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{title}"></td>
+                        <td th:text="|*{author.firstName} *{author.lastName}|"></td>
+                    </tr>
+            </tbody>
+         </table> -->
+         
+        <h1>과제</h1> 
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>제목</th>
+                    <th>저자</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!-- 반복문 자바의 향상된 for문과 비슷하다고 보면 됨 -->
+                    <tr th:each="book : ${bookList}" th:object="${book}" >
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{title}"></td>
+                        <td th:text="*{author} != null ? |*{author.firstName} *{author.lastName}| : '(저자 없음)'"></td>
+                    </tr>
+            </tbody>
+         </table>
+         
+	</body>
+</html>

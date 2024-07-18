@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Spring Boot 1</title>
+	</head>
+	<body>
+        <!-- templates/layout/fragments.html파일에서 선언된 프래그먼트 끼워넣기 fragments의 아규먼트 전달 가능.
+        마치 함수 호출처럼 사용하면 된다고 함 myHeader('Home Page')
+        div 태그 대신 프래그먼트 태그로 교체(replace)가 되는 방식
+        ~{...} : Fragment expressions.
+        -->
+        <div th:replace="~{/layout/fragments :: myHeader('Home Page')}"></div>
+        <!-- fragment expression: 
+        templates/layout/fragment.html 파일에서 선언된 navigation 프래그 먼트 끼워넣기
+        div안에 프래그 먼트를 삽입(insert)하는 방식. 이번엔 div안에 들어가짐.
+        -->
+        <div th:insert="~{/layout/fragments :: navigation}"></div>
+		<h1>첫번째 Spring Boot 프로젝트</h1>
+        <h2 th:text="${currentTime}"></h2><!-- ${...} : Variable expressions. 서버에서 뷰를 만들어서 전달 -->
+        <h2 th:text="${book}"></h2><!-- 컨트롤러에서 모델객체로 넘긴걸 받음. 변수 표현식 -->
+        <!-- 각각 쓰고 싶은 경우 -->
+        <div>
+            ID: <span th:text="${book.id}"></span><!-- 모델 클래스에 getter있어야함. -->
+            <br/>
+            제목: <span th:text="${book.title}"></span>
+            <br/>
+            저자: <span th:text="|${book.author.firstName}  ${book.author.lastName}|"></span>
+            <!-- | | 사이에 넣으면 ${}사이에 넣은 문자도 나타남. 문자열 합치기 
+            문자열과 문자열 붙히기 + 사용이나 || 사용 -->
+        </div>
+        <br />
+        <!-- *{...} : Selection expressions. -->
+        <div th:object="${book}"> 
+            ID: <span th:text="*{id}"></span> <!-- book이라는 오브젝트(변수)를 *참조함 book.id랑 같음.
+            단독으로는 사용 불가능. 변수안에 있는 id값을 찾겠다.
+            -->
+            <br/>
+            TITLE: <span th:text="*{title}"></span>
+            <br/>
+            AUTHOR: <span th:text="|*{author.firstName} *{author.lastName}|"></span>
+        </div>
+        
+        <!-- @{...} : Link (URL) expressions. -->
+        <nav>
+            <ul>
+                <li>
+                    <!-- thyemleaf link(URL) 표현식 
+                    JSTL의 <c:url> 태그와 비슷한 기능이라고 생각하면 됨.
+                    -->
+                    <a th:href="@{/book/list}">도서 목록</a><!-- @안에 /의 의미는 context path -->
+                </li>
+            </ul>
+        </nav>
+	</body>
+</html>
