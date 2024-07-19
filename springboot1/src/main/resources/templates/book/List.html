@@ -59,10 +59,14 @@
             </thead>
             <tbody>
             <!-- 반복문 자바의 향상된 for문과 비슷하다고 보면 됨 -->
-                    <tr th:each="book : ${bookList}" th:object="${book}" >
+                    <tr th:each="book : ${bookList}" th:object="${book}" > <!-- th:each 반복문 -->
                         <td th:text="*{id}"></td>
                         <td th:text="*{title}"></td>
-                        <td th:text="*{author} != null ? |*{author.firstName} *{author.lastName}| : '(저자 없음)'"></td>
+                        <!-- 과제 author이 null인 행 오류 해결. -->
+                        <!-- *{author != null} 조건식 ? true일 때 사용할 값 : false 일 때 사용할 값 -->
+                        <td th:text="*{author != null} ? |*{author.firstName} *{author.lastName}| : '(저자 없음)'"></td>
+                        <!-- |*{author.firstName} *{author.lastName}|은 
+                            *{author.firstName} + " " + *{author.lastName}과 같음 사이에 공백 넣으려고 || 안에 넣은 것 -->
                     </tr>
             </tbody>
          </table>

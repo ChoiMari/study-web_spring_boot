@@ -8,19 +8,22 @@
         <!-- templates/layout/fragments.html파일에서 선언된 프래그먼트 끼워넣기 fragments의 아규먼트 전달 가능.
         마치 함수 호출처럼 사용하면 된다고 함 myHeader('Home Page')
         div 태그 대신 프래그먼트 태그로 교체(replace)가 되는 방식
+        templates부터 시작하기 때문에 templates는 생략 가능.
         ~{...} : Fragment expressions.
         -->
-        <div th:replace="~{/layout/fragments :: myHeader('Home Page')}"></div>
+        <div th:replace="~{/layout/fragments :: myHeader('Home Page')}"></div> <!-- 함수 호출처럼 사용 (아규먼트처럼) -->
         <!-- fragment expression: 
         templates/layout/fragment.html 파일에서 선언된 navigation 프래그 먼트 끼워넣기
         div안에 프래그 먼트를 삽입(insert)하는 방식. 이번엔 div안에 들어가짐.
         -->
         <div th:insert="~{/layout/fragments :: navigation}"></div>
 		<h1>첫번째 Spring Boot 프로젝트</h1>
-        <h2 th:text="${currentTime}"></h2><!-- ${...} : Variable expressions. 서버에서 뷰를 만들어서 전달 -->
-        <h2 th:text="${book}"></h2><!-- 컨트롤러에서 모델객체로 넘긴걸 받음. 변수 표현식 -->
+        <h2 th:text="${currentTime}">현재시간</h2><!-- ${...} : Variable expressions. 서버에서 뷰를 만들어서 전달 -->
+        <!-- 현재시간이 ${currentTime}로 교체되서 화면에 그려짐. 태그 사이에 있는 현재시간은 안보임 -->
+        <h2 th:text="${book}"></h2><!-- 컨트롤러에서 모델객체로 넘긴걸 받음. 변수 표현식 롬복이 자동으로 만들어주는 toString으로 나옴-->
         <!-- 각각 쓰고 싶은 경우 -->
         <div>
+        <!-- getter메서드들이 호출 -->
             ID: <span th:text="${book.id}"></span><!-- 모델 클래스에 getter있어야함. -->
             <br/>
             제목: <span th:text="${book.title}"></span>
@@ -36,7 +39,7 @@
             단독으로는 사용 불가능. 변수안에 있는 id값을 찾겠다.
             -->
             <br/>
-            TITLE: <span th:text="*{title}"></span>
+            TITLE: <span th:text="*{title}"></span><!-- book.title과 같음 th:object을 선언하고 *{}을 사용해서 book.을 생략 할 수 있는 것  -->
             <br/>
             AUTHOR: <span th:text="|*{author.firstName} *{author.lastName}|"></span>
         </div>
@@ -46,10 +49,40 @@
             <ul>
                 <li>
                     <!-- thyemleaf link(URL) 표현식 
-                    JSTL의 <c:url> 태그와 비슷한 기능이라고 생각하면 됨.
+                    JSTL의 <c:url> 태그와 비슷한 기능이라고 생각하면 됨. context path 부터 시작하는 주소(경로)
                     -->
                     <a th:href="@{/book/list}">도서 목록</a><!-- @안에 /의 의미는 context path -->
                 </li>
+                <!-- 쿼리스트링 
+                    jsp에서는 <c:url>의 열고 닫는 태그 사이에 <c:param> 으로 넣음
+                -->
+                <li>
+                    <!-- 질의 문자열(쿼리스트링)을 포함하는 url작성 방법 -->
+                   <!-- <a th:href="@{/body/details?id=1}">도서1 상세 페이지</a>--><!-- 이렇게도 사용 가능하나 나쁜 방법 이라고 함. 값에 특수문자나 한글이 들어갈수도 있어서-->
+                    <a th:href="@{/book/details(id=1)}">도서1 상세 페이지</a>
+                    <!-- @{/book/details(id=1, title='-_-')} 쿼리스트링 2개 처리 방법 그냥 , 쓰고 더 추가하면 됨 -->
+                    <a th:href="@{/book/details(id=1, title='한글')}">test</a> <!-- 쿼리스트링 값이 인코딩 되어있음. -->
+                    <!-- 쿼리스트링을 함수의 아규먼트처럼 넣어서 전달하면 된다고 함. -->
+                </li>
+                <li>
+                    <!-- path variable을 포함하는 URL expression 작성 방법 
+                    url의 일부가 마치 변수 처럼 가변적으로 변할 수 있는 것.
+                    -->
+                    <!-- 권장하지 않는 방법 <a th:href="@{/book/details/} + 2">도서2 상세 페이지</a> 
+                     결과 : (http://localhost:8080)contextpath/book/details/2 이게 됨. 더하기는 붙인다는 뜻으로 사용됨.
+                     -->
+                     
+                     <!-- 권장 {id}은 변하는 url 변수 ()부분은 {id}에 들어갈 값 설정 
+                     path variable의 아규먼트를 전달하는 거라고 생각하면 된다고 함
+                     path variable이 2개인 경우 <a th:href="@{/book/details/{id}/{title}(id=2)(title='책제목')}">도서2 상세 페이지</a>
+                     -->
+                    <a th:href="@{/book/details/{id}(id=2)}">도서2 상세 페이지</a>
+                    <!--  결과 : http://localhost:8080/book/details/2 -->
+                </li>
+                <!-- @{/book/{id}/details(id=1, category='abc')} 
+                    path variable 자리에 1이 들어가고 category='abc'부분은 쿼리스트링이 됨
+                    결과 (http://localhost:8080)contextpath/book/1/details?category=abc
+                -->
             </ul>
         </nav>
 	</body>

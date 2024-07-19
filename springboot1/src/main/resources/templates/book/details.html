@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>스프링 부트 1</title>
+	</head>
+	<body>
+    <header th:replace="~{/layout/fragments :: myHeader('도서 상세 페이지')}"></header>
+		
+        <div th:object="${myBook}">
+            ID : <span th:text="*{id}"></span>
+            <br />
+            TITLE : <span th:text="*{title}"></span>
+            <br />
+            AUTHOR : <span th:text="*{author != null} ? | *{author.lastName}😗 | : '저자 없음'"></span>
+        </div>
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>제목</th>
+                    <th>저자</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!-- 반복문 자바의 향상된 for문과 비슷하다고 보면 됨 -->
+                    <tr th:object="${myBook}">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{title}"></td>
+                        <td th:text="|*{author.firstName} *{author.lastName}|"></td>
+                    </tr>
+            </tbody>
+         </table>
+	</body>
+</html>
