@@ -27,7 +27,7 @@ public class Employee { //테이블 이름과 다름. 만약 같았으면 @ 1개
 	
 	@Id //-> Primary key
 	@Column(name="EMPNO") //-> 필드 이름과 실제 컬럼 이름이 다를 때 사용. 테이블의 컬럼과 달라서 사용함.
-	private Integer id; //사번
+	private Integer id; //사번. 테이블에서는 EMPNO
 	
 	private String ename; //사원이름
 	private String job; 
