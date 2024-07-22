@@ -17,7 +17,14 @@
                 <li class="list-group-item"><p>사번 : <span th:text="${emp.id}"></span></p></li>
                 <li class="list-group-item"><p>이름 : <span th:text="${emp.ename}"></span></p></li>
                 <li class="list-group-item"><p>직무 : <span th:text="${emp.job}"></span></p></li>
-                <li class="list-group-item"><p>매니저 : <a th:href="@{/employee/details(id=${emp.manager.id})}"><span th:text="${emp.manager != null} ? ${emp.manager.ename} : '없음'"></span></a></p></li>
+                <li class="list-group-item">
+                    <p>매니저 :
+                        <span th:if="${emp.manager != null}">
+                            <a th:href="@{/employee/details(id=${emp.manager.id})}" th:text="${emp.manager.ename}"></a>
+                        </span>
+                        <span th:if="${emp.manager == null}">없음</span>
+                    </p>
+                </li>
                 <li class="list-group-item"><p>입사일 :<span th:text="${emp.hiredate}"></span></p></li>
                 <li class="list-group-item"><p>급여 : <span th:text="${emp.salary}"></span></p></li>
                 <li class="list-group-item"><p>수당 : <span th:text="${emp.commission != null} ? ${emp.commission} : '없음'"></span></p></li>
