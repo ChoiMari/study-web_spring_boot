@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.itwill.springboot2.domain.Department;
 import com.itwill.springboot2.domain.Employee;
@@ -52,18 +53,59 @@ public class EmployeeRepositoryTest {
 	}
 	
 	
-	 @Test
+//	 @Test
+//	    public void findByTest() {
+//	        // 사번이 테이블에 있는 경우:
+//	        Optional<Employee> emp1 = empRepo.findById(7788); //사번 7788찾음
+//	      //  Employee scott = emp1.get(); 
+//	        Employee scott = emp1.orElseGet(() -> null);
+//	        assertThat(scott).isNotNull();
+//	        assertThat(scott.getEname()).isEqualTo("SCOTT");
+//	        log.info("scott: {}", scott);
+//	        
+//	        // 사번이 테이블에 없는 경우:
+//	        Optional<Employee> emp2 = empRepo.findById(1000); //사번이 1000번 행 없음.
+//	        Employee none = emp2.orElseGet(() -> null); 
+//	        //만약 값이 있음 그 값을 리턴. 
+//	        //그렇지 않으면 returns the resultproduced by the supplying function. 
+//	        //() -> null 람다 표현식. 값이 없으면 null을 리턴.(값이 없는 경우엔 null리턴)
+//	        assertThat(none).isNull();//-> null임을 주장.
+//	    }
+	
+//	@Transactional
+//	 @Test
 	    public void findByTest() {
 	        // 사번이 테이블에 있는 경우:
-	        Optional<Employee> emp1 = empRepo.findById(7788);
-	        Employee scott = emp1.get();
+	        Optional<Employee> emp1 = empRepo.findById(7788); //사번 7788찾음
+	      //  Employee scott = emp1.get(); 
+	        Employee scott = emp1.orElseGet(() -> null);
+	        assertThat(scott).isNotNull();
 	        assertThat(scott.getEname()).isEqualTo("SCOTT");
 	        log.info("scott: {}", scott);
-	        
+	        log.info("dept={}",scott.getDepartment());
 	        // 사번이 테이블에 없는 경우:
-	        Optional<Employee> emp2 = empRepo.findById(1000);
-	        Employee none = emp2.orElseGet(() -> null);
-	        assertThat(none).isNull();
+	        Optional<Employee> emp2 = empRepo.findById(1000); //사번이 1000번 행 없음.
+	        Employee none = emp2.orElseGet(() -> null); 
+	        //만약 값이 있음 그 값을 리턴. 
+	        //그렇지 않으면 returns the resultproduced by the supplying function. 
+	        //() -> null 람다 표현식. 값이 없으면 null을 리턴.(값이 없는 경우엔 null리턴)
+	        assertThat(none).isNull();//-> null임을 주장.
+	    }
+	    
+	    @Transactional
+	    @Test
+	    public void findMangerTest() {
+	    	//사번 7369인 직원 정보 검색 : 
+	    	//Optional<Employee> emp	= empRepo.findById(7369); //리턴 타입 Optional<Employee>로 되어있음
+	    	//만약 Optional<Employee>쓰기 싫다면?? 그냥 Employee 쓰면 에러. 리턴 타입 맞지 않음. 
+	    	//메서드 하나 더 호출해야함 
+	    	Employee emp	= empRepo.findById(7369).orElseThrow(); ///->리턴값 없으면 예외던짐. 우리는 이게 지금 null이 아님 알고있어서 사용함.
+	    	assertThat(emp.getId()).isEqualTo(7369);
+	    	log.info("emp={}",emp);
+	    	
+	    	Employee mgr = emp.getManager(); //매니져의 매니져도 알아낼수있음 null만 아니면.
+	    	assertThat(mgr.getId()).isEqualTo(7902); // 7369직원의 매니저는 7902
+	    	log.info("mgr={}",mgr);
 	    }
 	
 	
