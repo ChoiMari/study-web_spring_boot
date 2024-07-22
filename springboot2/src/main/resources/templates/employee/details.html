@@ -17,6 +17,7 @@
                 <li class="list-group-item"><p>사번 : <span th:text="${emp.id}"></span></p></li>
                 <li class="list-group-item"><p>이름 : <span th:text="${emp.ename}"></span></p></li>
                 <li class="list-group-item"><p>직무 : <span th:text="${emp.job}"></span></p></li>
+                <!-- 매니저가 있을 때만 링크 표시 -->
                 <li class="list-group-item">
                     <p>매니저 :
                         <span th:if="${emp.manager != null}">
