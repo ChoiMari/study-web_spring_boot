@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,11 +21,38 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/employee")
 public class EmployeeController {
 	
-	//생성자의 의한 의존성 주입. (문서에서의 권장 사항) 1)@RequiredArgsConstructor 2)final 필드
-	private final EmployeeService empSvc;
 	
-	@GetMapping("/list")
-	public void list(Model model) {
+	
+	 // 생성자에 의한 의존성 주입: (1) RequiredArgsConstructor + (2) final field
+    private final EmployeeService empSvc;
+
+    @GetMapping("/list")
+    public void list(Model model) {
+        log.info("list()");
+        
+        // 서비스(비즈니스) 계층의 메서드를 호출해서 (데이터베이스의) 직원 목록을 불러옴.
+        List<Employee> list = empSvc.read();
+        
+        // 직원 목록을 뷰 템플릿에게 전달.
+        model.addAttribute("employees", list);
+    }
+    
+    @GetMapping("/details/{id}")
+    public String details(@PathVariable Integer id, Model model) {
+        log.info("details(id={})", id);
+        
+        Employee emp = empSvc.read(id);
+        model.addAttribute("employee", emp);
+        
+        return "employee/details";
+    }
+	
+	
+//	//생성자의 의한 의존성 주입. (문서에서의 권장 사항) 1)@RequiredArgsConstructor 2)final 필드
+//	private final EmployeeService empSvc;
+//	
+	@GetMapping("/list2")
+	public void list2(Model model) {
 		log.info("list()");
 		
 		//서비스(비지니스) 계층의 메서드를 호출해서 (데이터베이스의) 직원 목록을 불러옴
@@ -35,10 +63,10 @@ public class EmployeeController {
 		
 	}
 	
-	@GetMapping("/details")
+	@GetMapping("/details2")
 	public void empDetails(Model model,@RequestParam(name= "id") int id) {
 		log.info("details(id={})",id);
-		Employee emp = empSvc.readById(id);
+		Employee emp = empSvc.read(id);
 		model.addAttribute("emp",emp);
 	}
 
