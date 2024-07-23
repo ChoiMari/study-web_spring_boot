@@ -30,7 +30,9 @@ public class EmployeeService {
        
     	log.info("read(id={})", id);
         
-        return empRepo.findById(id).orElseThrow();
+        return empRepo.findById(id).orElseThrow(); //empRepo.findById(id)만 쓰면 Optional<Employee> 타입이라서 그냥 Employee 타입
+        //하고 싶으면 메서드 한개 더 쓰면 됨.
+        //get(),orElseThrow(),orElseGet(()-> null);값이 없으면 람다표현식에서 리턴해주는 값
     }
 	
 //	//-> 생성자에 의한 의존성 주입. : (1) @RequiredArgsConstructor  (2) final field

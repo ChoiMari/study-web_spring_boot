@@ -25,6 +25,11 @@
                     <tr>
                         <th>매니저</th>
                         <td>
+                            <!-- 타임리프는 태그안에 속성으로 넣게 되어 있음. 조건문을 쓰기 위해서도 태그가 필요하다.
+                                th:block 하면 실제로 HTML태그는 만들어지지 않음 실제로는 <td>태그 안에 <a>태그만 들어가있다고 함.
+                                조건문을 사용하기 위한 더미 태그라고 생각하면 된다고..
+                                매니저가 null이 아닌경우만 a태그를 사용한 링크 생성.
+                            -->
                             <th:block th:if="*{manager != null}">
                                 <a th:href="@{/employee/details/{id}(id=*{manager.id})}"
                                     th:text="*{manager.ename}"></a>

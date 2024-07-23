@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Spring Boot 3</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="mt-5 mx-5">
+          <div th:replace="~{/layout/fragments :: pageHeader('department list page')}"></div>
+        <br />
+        </div>
+        <div class="ms-5 me-5 mt-5">
+            <main>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>부서 번호</th>
+                            <th>부서 이름</th>
+                            <th>매니저</th>
+                            <th>부서 위치</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr th:each=" l: ${list}" th:object="${l}">
+                            <td>
+                                <a th:href="@{/department/details/{id}(id=*{id})}"
+                                th:text="*{id}"></a>
+                            </td>
+                            <td th:text="*{departmentName}"></td>
+                            <td>
+                                <th:block th:if="*{manager != null}">
+                                    <a th:href="@{/employee/details/{id}(id=*{id})}" th:text="*{manager.lastName}"></a>
+                                </th:block>
+                            </td>
+                            <td>
+                                <th:block th:if="*{location != null}">
+                                    <a th:href="@{/location/details/{id}(id=*{id})}" th:text="*{location.city}"></a>
+                                </th:block>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            
+            </main>
+        </div>
+    </body>
+</html>

@@ -21,7 +21,7 @@ import lombok.ToString;
 // 매핑에 대한 스펙을 만든거라고. 자바 영속성 API ->기술을 구현한 자바 규격이 JPA고 
 //JAP를 구현한 라이브러리가 Hibernate인데 Hibernate가 ORM의 표준이 되었다고 함. 
 //해결
-@NoArgsConstructor //-> 기본 생성자 
+@NoArgsConstructor //-> 기본 생성자. 반드시 있어야 함!
 @Getter @ToString @EqualsAndHashCode
 @Entity //-> 데이터 베이스 테이블과 매핑하는 자바 객체. 테이블과 매핑되는 자바 클래스
 @Table(name = "EMP") //-> 이건 클래스 이름과 테이블 이름이 다른 경우에 사용하면 된다고 함.
@@ -37,8 +37,9 @@ public class Employee { //테이블 이름과 다름. 만약 같았으면 @ 1개
 	
 //	@Column(name="MGR") //-> 직원 매니저의 사번
 //	private Integer manager; //MGR.  실제 테이블의 컬럼이름과 달라서 @Column(name="MGR")으로 명시함. 같을 경우엔 @컬럼 쓸필요없다.
-	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ToString.Exclude //-> 제외시켜야함. 안그럼 종종 예외 발생한다고 함. 
+	@ManyToOne(fetch = FetchType.LAZY) //-> @ManyToOne : 여러개의 값들이 mgr 1개를 가리킴. 테이블에서의 관계. mgr컬럼 기준.
+	//처음부터 join하지 않고 FetchType.LAZY 필요할 때만 나중에 별도로 가져오겠다. 기본값은 아니지만 권장사항이라고 함.
 	@JoinColumn(name = "MGR")
 	private Employee manager;
 	

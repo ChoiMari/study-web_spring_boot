@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="~{/layout/fragments :: documentHeader}"></th:block>
+        
+    </head>
+    <body>
+        <div class="mt-5 mx-5">
+            <div th:replace="~{/layout/fragments :: pageHeader('홈 페이지')}"></div>
+                
+            <th:block th:replace="~{/layout/fragments :: bootstrapJS}"></th:block>
+            
+        </div>
+    </body>
+    
+</html>

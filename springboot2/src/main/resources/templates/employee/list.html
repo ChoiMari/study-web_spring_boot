@@ -22,10 +22,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="emp : ${employees}" th:object="${emp}">
+                    <tr th:each="emp : ${employees}" th:object="${emp}"><!-- th:object="${emp}"했기 때문에 생략가능 *{}로 생략해서 사용가능 -->
                         <td>
                             <a th:href="@{/employee/details/{id}(id=*{id})}"
-                                th:text="*{id}"></a>
+                                th:text="*{id}"></a> <!-- /employee/details/{id}까지 요청주소. pathvariable사용 (id=*{id})은 {id}에 들어갈 값 설정부분.-->
                         </td>
                         <td>
                             <a th:href="@{/employee/details/{id}(id=*{id})}"
@@ -33,9 +33,9 @@
                         </td>
                         <td th:text="*{job}"></td>
                         <td>
-                            <th:block th:if="*{manager != null}">
+                            <th:block th:if="*{manager != null}"> <!-- null이 아닌 경우에만 링크를 넣겠다. 이거 안해놓으면 사장은 매니저가 없기때문에 오류가남.-->
                                 <a th:href="@{/employee/details/{id}(id=*{manager.id})}"
-                                    th:text="*{manager.ename}"></a>
+                                    th:text="*{manager.ename}"></a> <!-- null.ename되기 때문에 문제가 되는것이라고 함. -->
                             </th:block>
                         </td>
                         <td th:text="*{hiredate}"></td>
