@@ -107,7 +107,7 @@ public class JpaQueryMethodTest {
 		list.forEach(System.out::println);
 	}
 	
-	@Test
+	//@Test
 	public void testSelectFindByHireDateBetween() {
 		List<Employee> list;
 		list = empRepo.findByHireDateBetween(LocalDate.of(2007, 1, 1),LocalDate.of(2007, 12, 31)); //대소문자 구분없이 포함해서 검색함.
@@ -115,7 +115,69 @@ public class JpaQueryMethodTest {
 		list.forEach(System.out::println);
 	}
 	
+	//@Test
+	public void testSelectFindByDepartmentDepartmentName() {
+		List<Employee> list;
+		list = empRepo.findByDepartmentDepartmentName("IT");
+		
+		list.forEach(System.out::println);
+	}
 	
+	//@Test
+	public void testSelectFindByDepartmentLocationCity() {
+		List<Employee> list;
+		list = empRepo.findByDepartmentLocationCity("Seattle");
+		
+		list.forEach(System.out::println);
+	}
+	
+	//@Test
+	public void testSelectFindByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase() {
+		List<Employee> list;
+		list = empRepo.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("te","te");
+		
+		list.forEach(System.out::println);
+	}
+	
+	//@Test
+	public void testFindByName() {
+		List<Employee> list;
+		list = empRepo.findByName("tE","Te");
+		
+		list.forEach(System.out::println);
+	}
+	
+	//@Test
+	public void testFindByName3() {
+		List<Employee> list;
+		list = empRepo.findByName3("tE");
+		
+		list.forEach(System.out::println);
+	}
+	
+	//@Test
+	public void testFindByDeptName() {
+		List<Employee> list;
+		list = empRepo.findByDeptName("IT");
+		
+		list.forEach(System.out::println);
+	}
+	
+	//@Test
+	public void testFindByCity() {
+		List<Employee> list;
+		list = empRepo.findByCity("Seattle");
+		
+		list.forEach(System.out::println);
+	}
+	
+	@Test
+	public void testFindByCountryName() {
+		List<Employee> list;
+		list = empRepo.findByCountryName("Canada");
+		
+		list.forEach(System.out::println);
+	}
 	
 
 }

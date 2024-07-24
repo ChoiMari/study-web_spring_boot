@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.itwill.springboot3.domain.Employee;
 //첫번째 엔터티 클래스 타입, @Id컬럼 타입 (여기에 int라고 못씀. 제네릭? 그건 기본타입 못쓴다고함. 래퍼?클래스 타입으로만 가능)
@@ -71,6 +73,73 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	// 입사 날짜가 날짜 범위 안에 있는 직원들의 정보(where hire_date between ? and ?)
 	List<Employee> findByHireDateBetween(LocalDate start, LocalDate end);
 	
+	//부서 이름으로 직원 검색
+//	--부서 이름(department_name)으로 찾기
+//	select  e.*, d.*
+//	from employees e
+//	    left join departments d
+//	    on e.department_id = d.department_id
+//	where d.department_name = ?;
+	List<Employee> findByDepartmentDepartmentName(String name);
 	
+//	--근무 하는 도시 이름으로 직원을 검색하기
+//	select e.*
+//	from employees e
+//	    left join departments d 
+//	    on e.department_id = d.department_id
+//	    left join locations l
+//	    on d.location_id = l.location_id
+//	where l.city = ?;
+	List<Employee> findByDepartmentLocationCity(String city);
+	//Department필드의 Department엔터티 클래스안의 Location필드의 Location엔터티 클래스안의 City로 찾겠다
+	
+	List<Employee> findByDepartmentLocationCityIgnoreCase(String city); //-> 대소문자 구분 X
+	
+	// 성(lastName)과 이름(firstName)이 대소문자 구분없이 같은 직원 찾기
+	List<Employee> findByFirstNameIgnoreCaseAndLastNameIgnoreCase(String firstName, String lastName);
+	
+	// 성(lastName) 또는 이름(firstName)에 대소문자 구분없이 문자열이 포함된 직원 찾기
+	List<Employee> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
+	
+	// 단점 보완하는 JPQL이 나왔다고함
+	// JPQL(Java Persistence Query Language)
+	// JPA에서 사용하는 "객체지향(object-oriented)" 쿼리 문법.
+	// 테이블이름과 테이블의 컬럼이름으로 쿼리 문장을 작성하는 것이 아니라,
+	// 엔터티 객체(클래스) 이름과 엔터티 필드 이름으로 쿼리를 작성하는 문법.
+	// alias(별명)을 반드시 사용해야 함.
+	// 엔터티 이름과 필드 이름은 대소문자를 구분한다.(sql과 다른점. sql에서는 컬럼이름 테이블이름 대소문자 상관없었으나...)
+	
+	
+	//모든 컬럼 검색 e.*아니라 그냥 e라고 쓰면 된다고 함. 테이블이름 아니라 엔터티 객체(클래스) 이름쓰고 엔터티 필드이름 사용(테이블컬럼이름 X)
+	@Query("select e from Employee e "
+			+ "where upper(e.firstName) like upper('%' || ?1 || '%') "
+			+ "or upper(e.lastName) like upper('%' || ?2 || '%')") //?1 메서드의 첫번째 아규먼트를 의미. ?2 메서드의 두번째 아규먼트.
+	List<Employee> findByName(String firstName, String lastName); // 메서드 이름 만들고 싶은대로 만들면 된다고..
+	
+	@Query("select e from Employee e "
+			+ "where upper(e.firstName) like upper('%' || :first || '%') "
+			+ "or upper(e.lastName) like upper('%' || :last || '%')")
+	List<Employee> findByName2(@Param("first") String firstName, @Param("last") String lastName);
+	//@Param("first") String firstName 이걸  :first 여기에 넣어라
+	//@Param("last") String lastName 이걸 :last 여기에 넣어라
+	
+	@Query("select e from Employee e "
+			+ "where upper(e.firstName) like upper('%' || :keyword || '%') "
+			+ "or upper(e.lastName) like upper('%' || :keyword || '%')")
+	List<Employee> findByName3(@Param("keyword") String name);
 
+	//부서 이름으로 검색하기
+	@Query("select e from Employee e where e.department.departmentName = :dname") //:dname ?(바인딩 파라미터 이름에 들어갈 값에 ?)안쓰고 @Param 쓴다고 함.
+	List<Employee> findByDeptName(@Param("dname") String deptName);
+	
+	// 특정 도시(예: Seattle)에 근무하는 직원들 검색하기
+	@Query("select e from Employee e where e.department.location.city = :city")
+	List<Employee> findByCity(@Param("city") String city); 
+	
+	// 특정 국가(예: Canada)에 근무하는 직원들 검색하기
+	@Query("select e from Employee e where e.department.location.country.countryName = :country") //조인 3번 일어남
+	List<Employee> findByCountryName(@Param("country")String country);
+	
+	
+	
 }
