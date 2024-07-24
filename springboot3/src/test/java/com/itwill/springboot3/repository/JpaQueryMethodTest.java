@@ -48,10 +48,18 @@ public class JpaQueryMethodTest {
 		list.forEach(System.out::println);
 	}
 	
-	@Test
+	//@Test
 	public void testSelectFirstNameContainingIgnoreCase() {
 		List<Employee> list;
 		list = empRepo.findByFirstNameContainingIgnoreCase("Te"); //대소문자 구분없이 포함해서 검색함.
+		
+		list.forEach(System.out::println);
+	}
+	
+	@Test
+	public void testSelectFirstNameContainingIgnoreCaseOrderByFirstNameDesc() {
+		List<Employee> list;
+		list = empRepo.findByFirstNameContainingIgnoreCaseOrderByFirstNameDesc("TE"); //대소문자 구분없이 포함해서 검색함.
 		
 		list.forEach(System.out::println);
 	}

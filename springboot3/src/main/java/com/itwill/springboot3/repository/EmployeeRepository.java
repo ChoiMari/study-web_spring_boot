@@ -9,7 +9,8 @@ import com.itwill.springboot3.domain.Employee;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	
 	//JPA query method 작성 방법:
-	//JPA에서 약속된 키워드들을 메서드 이름을 (카멜표기법으로)작성할 때 사용.
+	//JPA에서 약속된 키워드들과 엔터티의 필드 이름들을 사용해서 메서드 이름을 (카멜표기법으로)작성할 때 사용.
+	//-> 메서드 이름으로 sql을 추론해서 자동으로 만들어주어 실행해 준다고 함. 그래서 메서드 이름을 잘 작성해야.. 약속된 키워드로...
 	
 	//select * from employees where department_id = ?
 	//결과 행(레코드) 여러개 나올 수 있으면 List (리턴타입 생각해야..)
