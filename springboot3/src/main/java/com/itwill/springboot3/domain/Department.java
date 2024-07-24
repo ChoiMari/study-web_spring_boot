@@ -26,7 +26,7 @@ public class Department {
 	
 	@ToString.Exclude
 	@JoinColumn(name = "MANAGER_ID")
-	@OneToOne //부서의 매니저는 1명. 2명 이상일 수가 없음.
+	@OneToOne(fetch = FetchType.LAZY) //부서의 매니저는 1명. 2명 이상일 수가 없음.
 	private Employee manager;
 	
 	@ToString.Exclude

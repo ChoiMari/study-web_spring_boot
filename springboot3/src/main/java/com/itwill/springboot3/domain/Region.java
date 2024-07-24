@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name = "Regions")
+@Table(name = "REGIONS")
 @NoArgsConstructor @Getter @ToString @EqualsAndHashCode
 public class Region {
 	@Id

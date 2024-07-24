@@ -51,7 +51,7 @@ public class EmployeeRepositoryTest {
 		log.info("employees[0]={}",list.get(0)); //-> Employees 테이블의 1번째 행 출력해 봄. 인덱스로는 0번
 	}
 	
-	@Transactional
+	@Transactional//Lazy로 하면 이거 꼭 있어야 함.
 	@Test
 	public void testFindById() {
 		// EmployeeRepository.findById() 메서드 테스트
