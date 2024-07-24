@@ -1,5 +1,6 @@
 package com.itwill.springboot3.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,5 +48,29 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	List<Employee> findByFirstNameContainingIgnoreCaseOrderByFirstNameDesc(String keyword);
 	//약속 된 키워드이름으로만 메서드 이름 작성해야!!
 	//약속 된 키워드 이름은 https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html 여기서 찾을 수 있음.
+	
+	//급여가 어떤 값을 초과(GreaterThan)하는 직원들의 정보를 검색하기.
+	//select * from employees where salary > ? 
+	List<Employee> findBySalaryGreaterThan(Double salary); //int double 못씀.. Integer 또는 Double 사용 (아규먼트로 주는 파라미터 이름 중요하지 않음)
+	
+	// 급여가 어떤 값 미만(LessThan)인 직원들의 정보
+	//where salary < ?
+	List<Employee> findBySalaryLessThan(Double salary);
+	
+	// 급여가 어떤 범위 안(Between)에 있는 직원들의 정보(where salary between ? and ? ) 이상, 이하. >= ? and <= ? 
+	List<Employee> findBySalaryBetween(Double start,Double end);
+	
+	// 입사 날짜가 특정 날짜 이전인 직원들의 정보(where hire_date < ?)
+	//List<Employee> findByHireDateBefore(LocalDate date);
+	List<Employee> findByHireDateLessThan(LocalDate date);
+	
+	// 입사 날짜가 특정 날짜 이후인 직원들의 정보(where hire_date > ?)
+	//List<Employee> findByHireDateAfter(LocalDate date);
+	List<Employee> findByHireDateGreaterThan(LocalDate date);
+	
+	// 입사 날짜가 날짜 범위 안에 있는 직원들의 정보(where hire_date between ? and ?)
+	List<Employee> findByHireDateBetween(LocalDate start, LocalDate end);
+	
+	
 
 }
