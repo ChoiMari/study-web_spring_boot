@@ -55,8 +55,8 @@ public class EmployeeRepositoryTest {
 	@Test
 	public void testFindById() {
 		// EmployeeRepository.findById() 메서드 테스트
-		// employees 테이블과 jobs 테이블의 관계 테스트(JOB_ID - JOB_ID)
-		// Employees 테이블 Employees테이블 간의 관계 테스트(MANAGER_ID - MANAGER_ID)
+		// employees 테이블과 jobs 테이블의 관계 테스트(employees 테이블의 JOB_ID - jobs 테이블의 JOB_ID)
+		// Employees 테이블 Employees테이블 간의 관계 테스트(Employees 테이블의 MANAGER_ID - Employees테이블의 MANAGER_ID) 셀프 조인(같은 테이블에서 조인함)
 		
 		//테이블의 id(사번)가 존재하는 경우:
 		Employee emp = empRepo.findById(101).orElseThrow();//orElseThrow();값이 없으면 예외던짐.
