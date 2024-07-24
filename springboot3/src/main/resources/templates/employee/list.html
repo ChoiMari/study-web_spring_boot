@@ -35,8 +35,14 @@
                                 <a th:href="@{/employee/details/{id}(id=*{id})}"
                                 th:text="*{id}"></a>
                             </td>
-                            <td th:text="*{firstName}"></td>
-                            <td th:text="*{lastName}"></td>
+                            <td>
+                                <a th:href="@{/employee/details/{id}(id=*{id})}"
+                                th:text="*{firstName}"></a>
+                            </td>
+                            <td>
+                                <a th:href="@{/employee/details/{id}(id=*{id})}"
+                                th:text="*{lastName}"></a>
+                            </td>
                             <td th:text="*{email}"></td>
                             <td th:text="*{phoneNumber}"></td>
                             <td th:text="*{hireDate}"></td>

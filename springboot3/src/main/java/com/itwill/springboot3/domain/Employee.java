@@ -21,7 +21,7 @@ public class Employee {
 
 	@Id//-> PK라는 뜻
 	@Column(name = "EMPLOYEE_ID") //-> 테이블의 실제 컬럼 이름. 실제 컬럼이름과 달라서 작성함.
-	private Integer id;
+	private Integer id; 
 	
 	//JPA는 카멜 표기법의 엔터티 필드 이름을 테이블 컬럼의 _(언더스코어) 스네이크 표기법의 컬럼이름으로 자동 매핑함.
 	//실제 테이블은 first_name인데
