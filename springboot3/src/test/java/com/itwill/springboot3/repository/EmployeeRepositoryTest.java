@@ -61,9 +61,12 @@ public class EmployeeRepositoryTest {
 		//테이블의 id(사번)가 존재하는 경우:
 		Employee emp = empRepo.findById(101).orElseThrow();//orElseThrow();값이 없으면 예외던짐.
 		log.info("emp={}",emp);
-		log.info("emp.job={}",emp.getJob());
+		log.info("emp.job={}",emp.getJob()); //toString에서 제거해서 이렇게 확인함.(조인된 정보가 나옴)
 		log.info("emp.manager={}",emp.getManager());
-		
+		log.info("emp.department={}",emp.getDepartment());
+		log.info("emp.department.location={}",emp.getDepartment().getLocation());//emp.getDepartment()하면 Department객체에서 getLocation() 메서드 호출
+		log.info("emp.department.location.contry={}",emp.getDepartment().getLocation().getCountry());
+		log.info("emp.department.location.contry={}",emp.getDepartment().getLocation().getCountry().getRegion());
 	}
 	
 

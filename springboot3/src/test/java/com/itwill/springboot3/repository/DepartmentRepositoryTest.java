@@ -25,15 +25,15 @@ public class DepartmentRepositoryTest {
 		assertThat(deptRepo).isNotNull();
 		log.info("deptRepo={}",deptRepo);
 	}
-
+	
 	//@Test
 	public void testFindAll() {
 		long count = deptRepo.count();
 		assertThat(count).isEqualTo(27L);
 		
 		List<Department> list = deptRepo.findAll();
-		log.info("departments[0]={}",list.get(0));
-		
+		//log.info("departments[0]={}",list.get(0));
+		list.forEach(System.out::println);//(x) -> System.out.println(x) 람다 표현식
 		
 		}
 	
