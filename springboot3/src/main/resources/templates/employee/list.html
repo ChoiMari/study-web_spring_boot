@@ -37,8 +37,8 @@
                            
                             <td th:text="*{jobTitle}"></td>
                             <td>
-                                <th:block th:if="*{departmentName != null}">
-                                    <a th:href="@{/employee/details/{id}(id=*{employeeId})}" th:text="*{departmentName}"></a>
+                                <th:block th:if="*{department != null}">
+                                    <a th:href="@{/department/details/{id}(id=*{department.id})}" th:text="*{departmentName}"></a>
                                 </th:block>
                             </td>
                         </tr>
@@ -62,7 +62,7 @@
                     <li th:each="pageNo : ${#numbers.sequence(0,page.totalPages -1)}" 
                         th:if="${pageNo >= page.number -5 && pageNo < page.number +5}" class="page-item"
                         th:classappend="${pageNo == page.number} ? 'active'"> <!-- page객체에서 getnumber호출 한 것. --><!-- th:classappend 조건에 만족하는 경우에만 class에 속성 추가하겠다 -->
-                       <!--  -->
+                       <!--#numbers.sequence(0,page.totalPages -1) 반복할때 연속된 숫자가 필요한 경우사용함   -->
                         <!-- th:if="${pageNo >= page.number -5 && pageNo < page.number +5 
                             page.number 현재페이지 번호를 의미. 현재페이지 기준으로 뒤쪽 페이지는 5개까지만 버튼을 보여주겠다는 뜻.  
                             현재 페이지를 기준으로 다음페이지는 4개 더 보여주고 이전은 5개. 

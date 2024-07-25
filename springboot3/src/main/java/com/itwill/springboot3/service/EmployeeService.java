@@ -1,12 +1,13 @@
 package com.itwill.springboot3.service;
 
-import java.util.List;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.itwill.springboot3.domain.Employee;
 import com.itwill.springboot3.dto.EmployeeListItemDto;
@@ -22,6 +23,8 @@ public class EmployeeService {
 	
 	private final EmployeeRepository empRepo;
 	
+	@Transactional(readOnly = true ) //-> 엔터티 객체를 읽기 전용으로 만듬.오로지 select만하고 insert,delete,update 안하겠다. 
+	//-> 이렇게 하면 변경 못한다고 함. 이 서비스가 끝날때까지는 엔터티의 변경이 없다.
 	public Page<EmployeeListItemDto> read(int pageNo, Sort sort){ //Page<EmployeeListItemDto> 페이징 처리가 되어져있는 객체로 이해하기. 
 		//Sort sort 이건 정렬을 염두해놓고 선언한 것.
 		log.info("read(pageNo={}, sort={})",pageNo,sort);
@@ -33,6 +36,7 @@ public class EmployeeService {
 		Page<Employee> page = empRepo.findAll(pageable);
 		log.info("hasPrevious={}",page.hasPrevious()); //hasPrevious() 이전 페이지가 있으면 true, 없으면 false
 		log.info("hasNext={}",page.hasNext()); // page.hasNext() 다음페이지가 있는지 여부 알 수 있는 메서드. 다음 페이지가 있으면 true, 없으면 false
+		log.info("getNumber = {}", page.getNumber());//현재 Slice(페이지) 번호
 		log.info("getTotalPages={}",page.getTotalPages()); //전체 페이지 개수 //page.getContent() 유용하다고 함
 		
 		//List<Employee> list =  empRepo.findAll(); //findAll() jpa리파지토리를 상속받으면(인터페이스에서) 자동으로 생기는 메서드.
@@ -49,6 +53,7 @@ public class EmployeeService {
 		
 	}
 	
+	@Transactional(readOnly = true) // 읽기 전용으로 만듬. 기본값은 false여서 바꿈. 오로지 select만하고 insert,delete,update 안하겠다.
 	public Employee read(Integer id) {
 		log.info("read(id={}",id);
 		

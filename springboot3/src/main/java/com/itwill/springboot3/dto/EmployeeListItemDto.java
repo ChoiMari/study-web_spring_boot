@@ -1,5 +1,6 @@
 package com.itwill.springboot3.dto;
 
+import com.itwill.springboot3.domain.Department;
 import com.itwill.springboot3.domain.Employee;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class EmployeeListItemDto {
 	private String jobTitle;
 	private String departmentName; //department가 없는(null) 직원이 있음 그래서 departmentName 호출하는게 문제가 됨.
 	//entity.getDepartment()까지 하고 그 다음에 null이냐 아니냐 처리해야함.
-	
+	private Department department;
 	
 	public static EmployeeListItemDto fromEntity(Employee entity) { 
 		//dto객체가 만들어지기 전에 메서드를 호출해서 그 메서드가 가지고 있는 정보 리턴해야 되기 때문에 static으로 선언함.
@@ -45,6 +46,7 @@ public class EmployeeListItemDto {
 				.phoneNumber(entity.getPhoneNumber())
 				.jobTitle(jobTitle)
 				.departmentName(deptName)
+				.department(entity.getDepartment())
 				.build();
 		
 	}
