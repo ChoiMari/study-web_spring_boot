@@ -29,7 +29,7 @@ public class JobController {
 		model.addAttribute("list",list);
 	}
 	
-	@GetMapping("/details")
+	@GetMapping("/details/{id}")
 	public String details(@PathVariable(name = "id") String id, Model model) {
 		log.info("details(id={})");
 		 Job job = jobService.read(id);

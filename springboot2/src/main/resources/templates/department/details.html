@@ -32,15 +32,15 @@
                 <table>
                     <thead>
                         <tr>
-                        <th>사번</th>
-                        <th>이름</th>
-                        <th>직무</th>
-                        <th>매니저</th>
-                        <th>입사일</th>
-                        <th>급여</th>
-                        <th>수당</th>
-                        <th>부서</th>
-                    </tr>
+                            <th>사번</th>
+                            <th>이름</th>
+                            <th>직무</th>
+                            <th>매니저</th>
+                            <th>입사일</th>
+                            <th>급여</th>
+                            <th>수당</th>
+                            <th>부서</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr th:each="emp : ${department.employees}" th:object="${emp}">
