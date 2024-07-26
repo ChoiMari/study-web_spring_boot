@@ -1,0 +1,34 @@
+package com.itwill.springboot4.domain;
+
+import java.util.Set;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "QUESTIONS2")
+public class Question2 {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@Basic(optional = false)
+	private String question;
+	
+
+	//Answer2 엔터티에서 @ManyToOne을 사용하지 않고
+	//Question2 엔터티에서만 @OneToMany를 사용한 단방향 연관 관계인 경우
+	//questions2_answers 관계 테이블이 자동으로 생성됨(단점 insert시에 복잡하게 insert를 해야함)
+	// 뒷쪽은 필드 이름으로 만들어지고 앞쪽은 테이블이름으로 만들어짐. 필요한 경우도 있긴하다고 함
+	// 양방향으로 연결하거나 단방향으로 연결해야 할 때는 @ManyToOne을 사용한다고 함.
+	@OneToMany
+	private Set<Answer2> answers; //-> 연관 테이블로 만들어짐.
+
+}

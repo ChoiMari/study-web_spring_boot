@@ -13,7 +13,7 @@
             <div class="card border-info" style="width: 30%;">
                 <div class="card-header bg-transparent border-info py-2 my-2" style="text-align: center;"><h3>부서 상세보기</h3></div>
                 <div class="card-body" th:object="${dept}">
-                        <p class="card-text">부서 번호 : <span th:text="*{id}"></span></p>
+                        <p class="card-text">부서 번호 : <span th:text="*{departmentId}"></span></p>
                         <p class="card-text">부서 이름 : <span th:text="*{departmentName}"></span></p>
                         <p class="card-text">매니저 : <span th:if="*{manager != null}"><a th:href="@{/employee/details/{id}(id=*{manager.id})}" th:text="|*{manager.firstName} *{manager.lastName}|"></a></span></p>
                         <p class="card-text">위치 : <span th:if="*{location != null}"><a th:href="@{/location/details/{id}(id=*{location.id})}" th:text="*{location.city}"></a></span></p>
@@ -35,8 +35,8 @@
                     
                     <tbody>
                         <tr th:each=" emp : ${dept.employees}" th:object="${emp}">
-                            <td th:text="*{id}"></td>
-                            <td th:text="|*{firstName} *{lastName}|"></td>
+                            <td><a th:href="@{/employee/details/{id}(id=*{employeeId})}" th:text="*{employeeId}"></a></td>
+                            <td><a th:href="@{/employee/details/{id}(id=*{employeeId})}" th:text="*{employeeName}"></a></td>
                             <td th:text="*{phoneNumber}"></td>
                             <td><th:block th:if="*{job != null}"><a th:href="@{/job/details/{id}(id=*{job.id})}" th:text="*{job.jobTitle}"></a></th:block></td>
                             <td><th:block th:if="*{department != null}"><a th:href="@{/department/details/{id}(id=*{department.id})}" th:text="*{department.departmentName}"></a></th:block></td>

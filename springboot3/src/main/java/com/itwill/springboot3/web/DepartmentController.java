@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.itwill.springboot3.domain.Department;
+import com.itwill.springboot3.dto.DepartmentDetailsDto;
 import com.itwill.springboot3.service.DepartmentService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,13 +36,33 @@ public class DepartmentController {
 	}
 	
 	
-	@GetMapping("/details/{id}")
-	public String details(@PathVariable(name = "id") Integer id, Model model) {
-		log.info("details(id={})",id);
-		
-		Department dept = deptSvc.read(id);
-		model.addAttribute("dept", dept);	
-		
-		return "/department/details";
-	}
+//	@GetMapping("/details/{id}")
+//	public String details(@PathVariable(name = "id") Integer id, Model model) {
+//		log.info("details(id={})",id);
+//		
+//		Department dept = deptSvc.read(id);
+//		model.addAttribute("dept", dept);	
+//		
+//		return "/department/details";
+//	}
+	
+	 @GetMapping("/details/{id}")
+	    public String details(@PathVariable Integer id, Model model) {
+	        log.info("details(id={})", id);
+	        
+	        DepartmentDetailsDto dto = deptSvc.read(id);
+	        model.addAttribute("dept", dto);
+	        
+	        return "department/details";
+	    }
+	 
+	
+	 @GetMapping("/details")  //pathVariable과 다른 주소 //지금 이건 쿼리스트링으로 매핑하는 주소.
+	    public void details(@RequestParam(name = "dname") String departmentName, Model model) { //오버로딩
+	        log.info("details(departmentName={})", departmentName);
+	        
+	        DepartmentDetailsDto dto = deptSvc.read(departmentName);
+	        model.addAttribute("dept", dto);
+	    }
+	
 }

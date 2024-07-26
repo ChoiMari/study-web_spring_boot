@@ -9,6 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +20,9 @@ import lombok.ToString;
 @Entity //-> 엔터티 클래스
 @Table(name = "EMPLOYEES") // EMPLOYEES 테이블에 매핑되는 엔터티 객체. 실제 테이블 이름과 달라서 작성함. 실제 테이블 이름 EMPLOYEES라고 명시
 @NoArgsConstructor @Getter @ToString @EqualsAndHashCode //-> @Setter 없음. 그게 권장 사항.
+
+@AllArgsConstructor(access = AccessLevel.PRIVATE)//접근 권한 private
+@Builder
 public class Employee {
 
 	@Id//-> PK라는 뜻

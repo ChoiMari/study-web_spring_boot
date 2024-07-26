@@ -37,9 +37,15 @@
                            
                             <td th:text="*{jobTitle}"></td>
                             <td>
+                            <!-- 
                                 <th:block th:if="*{department != null}">
                                     <a th:href="@{/department/details/{id}(id=*{department.id})}" th:text="*{departmentName}"></a>
                                 </th:block>
+                             -->
+                             <th:block th:if="*{department != null}">
+                                    <a th:href="@{/department/details(dname=*{departmentName})}"
+                                th:text="*{departmentName}"></a>
+                            </th:block>
                             </td>
                         </tr>
                     </tbody>
