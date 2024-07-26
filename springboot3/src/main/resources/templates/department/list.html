@@ -55,7 +55,8 @@
                         th:classappend="${!page.hasPrevious} ? 'disabled'">
                         <a class="page-link"
                             th:href="@{|?p=${page.number -1}|}">&laquo;</a><!-- ${page.hasPrevious} 이전 페이지를 가지고 있지않으면 비활성화(disabled)(class속성에 비활성화 추가) -->
-                    </li>
+                    </li><!-- |?p=${page.number -1}| 이렇게 써서(||) 다른곳에서도 재활용 가능한 코드. 현재 주소에서 리퀘스트
+                    파라미터만 덧붙인다는 뜻. 그래서 fragment로 끼워넣을 수 있음 -->
                     
                     <!-- 페이지 네이션 반복문(페이지 수만큼 반복) -->
                     <!-- 원래는 0부터 전체 페이지 수인데 페이지1부터 시작하게 하려고 페이지 번호에 1더하고 전체페이지수 1뺀것 -->
