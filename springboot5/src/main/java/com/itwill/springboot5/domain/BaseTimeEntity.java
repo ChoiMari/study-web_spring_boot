@@ -28,6 +28,7 @@ import lombok.ToString;
 //-> JPA는 거의 jakarta.persistence로 시작해서 import한다고 함.
 //간혹 옛날 코드에서 javax.persistence로 시작하면 컴파일 안된다고 함.(자바 21버전에서는 불가)
 //javax는 옛날 버전(자바8,9에서 가능함)이라서 import문장을 javax에서 jakarta로 변경해주기
+
 public class BaseTimeEntity {
 	//포스트와 댓글 모두 생성, 수정 시간이 있었음. -> 엔터티들이 최소 insert된 시간, 가장 마지막에 update된 시간 정보들.
 	// 거의 대부분의 엔터티(테이블)들이 가져야될 속성. 그래서 이 2가지는 수퍼클래스(상위, 부모 클래스)로 설계하고
