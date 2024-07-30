@@ -97,24 +97,37 @@ public class PostService {
 //		
 //		return PostDetailsDto.fromEntity(post);
 //	}
-	//상세보기 페이지에서 삭제 시키는 서비스
+	//상세보기 페이지에서 삭제 시키는 서비스(id로 삭제시킴)
+	@Transactional
 	public void delete(Long id) {
 		log.info("delete(id={})",id);
-		postRepo.deleteById(id);
+		postRepo.deleteById(id); //-> 예외만 발생하지 않으면 delete 성공했다고 생각하면 된다고 함.
 	}
 	
 	//상세보기 페이지에서 업데이트(수정)시키는 서비스
+	@Transactional //-> (readOnly = true)으로 설정하지 않으면 기본값false
 	public void update(PostUpdateDto dto) {
 		log.info("update(dto={})",dto);
 		
 		//Post entity = dto.toEntity();
+		//1. id로 Post 엔터티 객체를 찾음(DB에서 id로 select쿼리를 실행하자 -> findById(id);)
 		Post entity = postRepo.findById(dto.getId()).orElseThrow();
 		log.info("findById 결과 = {}", entity);
+		
+		//2. DB에서 검색한 엔터티 객체의 필드들을 업데이트(수정) Post(엔터티 클래스에) update하는 메서드 만들었음. 
+		//변경한 부분의 필드값만 초기화시켜서 변경시키는 메서드.
+		//DB에 직접적으로 변경은 안함
 		entity.update(dto.getTitle(),dto.getContent()); //-> 우리가 수업시간에 만든 메서드
 		//-> 리턴값 저장하지 않아두 됨
 		log.info("update 호출 후= {}",entity);//-> 여기까지는 제목, 내용만 바뀜.(수정 시간은 안 바뀜)
 		
-		entity = postRepo.save(entity);//-> 수정된 entity를 아규먼트로 넘김. 그럼 update쿼리 실행 : @Id필드가 null이 아닌 경우(레코드가 있는 경우)
+		//3.@Transactional 쓰기 가능한 상태((readOnly = true)으로 설정하지 않음 기본값 false여서 쓰기 가능상태)
+		//@Transactional 애너 테이션을 사용한 경우
+		//-> DB에서 검색한 entity 객체가 변경되면 update 쿼리가 자동으로 실행된다.(setter메서드 대신에 update 메서드 만들었다고 함)
+		// 일단 먼저 검색을 해야함.
+		
+		//@Transactional을 사용하지 않은 경우 entity = postRepo.save(entity); 메서드를 직접 호출해서 실행해야한다.
+		//entity = postRepo.save(entity);//-> 수정된 entity를 아규먼트로 넘김. 그럼 update쿼리 실행 : @Id필드가 null이 아닌 경우(레코드가 있는 경우)
 		//똑같은 메서드인데 @Id 필드가 null이면 insert실행 있으면 UPDATE실행.
 		//아이디 1번으로 select를 다시함
 		//리턴값 저장하지 않아도 된다고 했는데 로그 출력이 잘 안되서 entity = 로 리턴값 저장함.
@@ -125,7 +138,7 @@ public class PostService {
 		
 		//-> 유니테스트 동안에만 동작방식 설명 들은거고 실제는 @트렌젝션 어쩌고로 변경한다고함
 		//-> find먼저하고 업데이트 한다고? 이런식으로 한다고 함.
-		log.info("save 호출 후= {}",entity);
+		//log.info("save 호출 후= {}",entity);
 		
 		
 	}

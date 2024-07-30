@@ -74,8 +74,8 @@ public class PostController {
 	
 	//상세보기에서 삭제버튼 클릭시 요청 처리 주소
 	@GetMapping("/delete")
-	public String details(@RequestParam(name = "id") Long id) { // 오버로딩
-		log.info("detailes(id={})",id);
+	public String delete(@RequestParam(name = "id") Long id) { // 오버로딩
+		log.info("delete(id={})",id);
 		postSvc.delete(id);
 		
 		return "redirect:/post/list";
