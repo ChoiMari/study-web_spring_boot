@@ -6,9 +6,9 @@
 	<body>
 		<th:block th:replace="~{/layout/fragments :: pageHeader('포스트 목록 페이지')}"></th:block>
         
-        <main class="mx-5 mt-4">
-            <div class="card">
-            <div class="card-header ps-3"><h1>포스트 목록</h1></div>
+        <main class="mt-5 d-flex justify-content-center">
+            <div class="card col-7">
+            <div class="card-header ps-3"><h1 style="text-align: center;">포스트 목록</h1></div>
                 <div class="card-body my-2 mt-3">
                     <table class="table table-bordered border-dark table-hover" style="text-align: center;">
                         <thead class="table table-dark">
@@ -41,9 +41,8 @@
                 </div>        
             </div>
             
-            <th:block th:replace="~{/layout/fragments :: pagination}"></th:block>
-            
         </main>
+        <th:block th:replace="~{/layout/fragments :: pagination}"></th:block>
         
         
         
