@@ -3,6 +3,7 @@ package com.itwill.springboot5.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -85,6 +86,17 @@ public class PostRepositoryTest {
 		postRepo.deleteById(1L); //-> 예외만 발생하지 않으면 delete성공했구나 하고 알면 된다고 함.
 		//JPA는 @Id로 select 쿼리를 먼저 실행한 후
 		//엔터티가 존재하는 경우에 delete 쿼리를 실행함.
+	}
+	
+	@Test
+	public void makeDummyData() {
+		List<Post> data = new ArrayList<>(); //-> 비어있는 리스트만듬
+		for(int i = 1; i <= 50; i++) {
+			Post post = Post.builder().title("Dummy Title #" + i)
+					.content("Dummy Content #" + i).author("admin"+i).build();
+			data.add(post);
+		}
+		postRepo.saveAll(data);
 	}
 	
 }

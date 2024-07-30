@@ -9,7 +9,7 @@
         <main class="mx-5 mt-4">
             <div class="card">
             <div class="card-header ps-3"><h1>포스트 목록</h1></div>
-                <div class="card-body my-2">
+                <div class="card-body my-2 mt-3">
                     <table class="table table-bordered border-dark table-hover" style="text-align: center;">
                         <thead class="table table-dark">
                             <tr>
@@ -23,7 +23,15 @@
                         <tbody th:each="p :${page}"  th:object=${p} >
                             <tr>
                                 <td th:text="*{id}"></td>
-                                <td th:text="*{title}"></td>
+                                <!-- 쿼리스트링 리퀘스트파라미터 방식 요청 주소로 이동함
+                                    (예 : 81번글 클릭 시 이동하는 요청주소 http://localhost:8080/post/details?id=81)
+                                    제목 클릭하면 상세보기 페이지로 이동. 리퀘스트파라미터(요청파라미터방식)로 이동함 
+                                    th:href="@{/post/details/{id}(id=*{id})}" 이건 pathvariable방식
+                                -->
+                                <td>
+                                    <a th:href="@{/post/details(id=*{id})}" th:text="*{title}"></a>
+                                </td>
+                                
                                 <td th:text="*{author}"></td>
                                 <!-- #temporals 시간 타입 다룰 때 사용 -->
                                 <td th:text="*{#temporals.format(modifiedTime,'yyyy-MM-dd HH:mm:ss')}"></td>
@@ -33,9 +41,11 @@
                 </div>        
             </div>
             
+            <th:block th:replace="~{/layout/fragments :: pagination}"></th:block>
+            
         </main>
         
-        <th:block th:replace="~{/layout/fragments :: pagination}"></th:block>
+        
         
         <th:block th:replace="~{/layout/fragments :: bootstrapJS}"></th:block>
 	</body>
