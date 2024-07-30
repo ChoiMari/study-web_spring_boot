@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.itwill.springboot5.domain.Post;
 import com.itwill.springboot5.dto.PostCreateDto;
+import com.itwill.springboot5.dto.PostDetailsDto;
 import com.itwill.springboot5.dto.PostListItemDto;
+import com.itwill.springboot5.dto.PostUpdateDto;
 import com.itwill.springboot5.repository.PostRepository;
 
 
@@ -80,6 +82,54 @@ public class PostService {
 		//-> DB에 insert된 레코드의 PK(id)를 리턴.
 		//-> entity 자체를 리턴해도 됨. 설계하기 나름.
 	}
+	
+	//글 상세보기 (id로 select해옴)
+	@Transactional(readOnly = true) //-> 읽기 전용으로 만듬.(Defaults to false. 디폴트는 false)
+	public Post readById(Long id) {
+		log.info("readById(id={})",id);
+		Post entity = postRepo.findById(id).orElseThrow();
+		log.info("entity = {}",entity);
+		return entity;
+}
+//	public PostDetailsDto readById(Long id) {
+//		log.info("readById(id={})",id);
+//		Post post = postRepo.findById(id).orElseThrow();
+//		
+//		return PostDetailsDto.fromEntity(post);
+//	}
+	//상세보기 페이지에서 삭제 시키는 서비스
+	public void delete(Long id) {
+		log.info("delete(id={})",id);
+		postRepo.deleteById(id);
+	}
+	
+	//상세보기 페이지에서 업데이트(수정)시키는 서비스
+	public void update(PostUpdateDto dto) {
+		log.info("update(dto={})",dto);
+		
+		//Post entity = dto.toEntity();
+		Post entity = postRepo.findById(dto.getId()).orElseThrow();
+		log.info("findById 결과 = {}", entity);
+		entity.update(dto.getTitle(),dto.getContent()); //-> 우리가 수업시간에 만든 메서드
+		//-> 리턴값 저장하지 않아두 됨
+		log.info("update 호출 후= {}",entity);//-> 여기까지는 제목, 내용만 바뀜.(수정 시간은 안 바뀜)
+		
+		entity = postRepo.save(entity);//-> 수정된 entity를 아규먼트로 넘김. 그럼 update쿼리 실행 : @Id필드가 null이 아닌 경우(레코드가 있는 경우)
+		//똑같은 메서드인데 @Id 필드가 null이면 insert실행 있으면 UPDATE실행.
+		//아이디 1번으로 select를 다시함
+		//리턴값 저장하지 않아도 된다고 했는데 로그 출력이 잘 안되서 entity = 로 리턴값 저장함.
+		//다른부분이 있으면 update됨. modifiedTime 자동으로 채워서 바꿈
+		//-> @Id 필드가 null이 아닌 경우(레코드가 있는 경우)와
+		// 엔터티 객체가 DB에 있는 레코드와 다른경우(저장된 데이터가 달라진 경우) update쿼리가 실행 된다.
+		
+		
+		//-> 유니테스트 동안에만 동작방식 설명 들은거고 실제는 @트렌젝션 어쩌고로 변경한다고함
+		//-> find먼저하고 업데이트 한다고? 이런식으로 한다고 함.
+		log.info("save 호출 후= {}",entity);
+		
+		
+	}
+	
 	
 
 }

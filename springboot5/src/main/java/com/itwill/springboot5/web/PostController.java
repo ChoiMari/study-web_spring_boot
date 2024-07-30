@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.itwill.springboot5.domain.Post;
 import com.itwill.springboot5.dto.PostCreateDto;
+import com.itwill.springboot5.dto.PostDetailsDto;
 import com.itwill.springboot5.dto.PostListItemDto;
+import com.itwill.springboot5.dto.PostUpdateDto;
 import com.itwill.springboot5.service.PostService;
 
 
@@ -57,6 +60,34 @@ public class PostController {
 		postSvc.create(dto);
 		
 		return "redirect:/post/list"; //-> 글 작성 후 포스트 목록보기 페이지로 리다이렉트.
+	}
+	
+	//상세보기 , 수정하기 페이지 요청 처리 주소
+	@GetMapping({"/details","/modify"}) //-> 하나의 컨트롤러가 2개의 요청주소 처리(get방식)
+	public void details(Model model, @RequestParam(name = "id") Long id) {
+		log.info("GET details(id={})",id);
+		//PostDetailsDto dto = postSvc.readById(id);
+		Post entity = postSvc.readById(id);
+		model.addAttribute("post", entity);
+	} //-> 뷰의 이름은 요청주소가 /details 로 들어오면 post폴더의 details.html이 되고
+	// 요청주소가 /modify 로 들어오면 post 폴더의 modify.html이 됨.
+	
+	//상세보기에서 삭제버튼 클릭시 요청 처리 주소
+	@GetMapping("/delete")
+	public String details(@RequestParam(name = "id") Long id) { // 오버로딩
+		log.info("detailes(id={})",id);
+		postSvc.delete(id);
+		
+		return "redirect:/post/list";
+	}
+	
+	@PostMapping("/update")
+	public String modify(PostUpdateDto dto) {
+		log.info("PostUpdateDto(dto={})",dto);
+		postSvc.update(dto);
+		
+		return "redirect:/post/details?id=" + dto.getId();
+	
 	}
 
 }

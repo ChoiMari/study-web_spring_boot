@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="~{/layout/fragments :: documentHeader}"></th:block>
+    </head>
+    <body>
+        <th:block th:replace="~{/layout/fragments :: pageHeader('포스트 수정 페이지')}"></th:block>
+        
+        <main>
+            <div class="mt-5 card container">
+                <div class="card-body" th:object="${post}">
+                    <form id="updateForm" method="post" th:action="@{/post/update}">
+                        <div class="mt-2 d-none"> <!-- d-none : 화면에는 보이지 않지만 html로는 작성이 되는 부분 -->
+                            <label class="form-label" for="id">번호</label>
+                            <input type="text" class="form-control" id="id" 
+                                th:value="*{id}" readonly name="id"/>
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label" for="title">제목</label>
+                            <input type="text" class="form-control" id="title" 
+                                th:value="*{title}" name="title" autofocus/>
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label" for="content">내용</label>
+                            <textarea rows="5" class="form-control" id="content"
+                                th:text="*{content}" name="content"></textarea>
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label" for="author">작성자</label>
+                            <input type="text" class="form-control" id="author" 
+                                th:value="*{author}" readonly disabled />
+                        </div>
+                    </form>
+                    <!-- 중요!!! 버튼 form태그 안에 넣으면 안된다!!! form태그 안에 넣은 버튼은 무조건 submit으로 넘어감 -->
+                    <div class="mt-3 d-flex justify-content-end">
+                        <button class="btn btn-outline-danger me-3" id="btnDelete">삭제</button>
+                        <button class="btn btn-outline-primary me-2" id="btnUpdate">수정 완료</button>
+                    </div> 
+                </div>
+            </div>
+        </main>
+        <!-- templates 제외하고 그 이하 경로 쓰면 됨 -->
+        <th:block th:replace="~{/layout/fragments :: bootstrapJS}"></th:block>
+        
+        <!-- static폴더 생략하고 그 이하 경로 쓰면 된다고 함 -->
+        <script th:src="@{/js/post-modify.js}"></script>
+        
+    </body>
+</html>
