@@ -28,7 +28,7 @@
         const check = confirm('정말 삭제할까요?');
         if (check) {
             const id = document.querySelector('input#id').value;
-            location.href = `/post/delete?id=${id}`;
+            location.href = `/post/delete?id=${id}`; //get매핑
         }
     });
   
