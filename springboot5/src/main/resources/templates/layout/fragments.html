@@ -49,14 +49,19 @@
          <th:block th:fragment="pagination">
          <!-- 페이지 네이션 시작 -->
             <nav>
-                <ul class="pagination justify-content-center mt-3"> <!--justify-content-center을 nav에다 주었더니 적용이 안되어서 ul에 넣으니 적용되었음 -->
+                <ul class="pagination justify-content-center mt-3"
+                    th:with="uriBuilder=${T(com.itwill.springboot5.web.ServletUriComponentsBuilderWrapper).fromCurrentRequest()}">
+                     <!--T(com.itwill.springboot5.web.ServletUriComponentsBuilderWrapper) 클래스 호출 .fromCurrentRequest() 메서드호출
+                    그걸 uriBuilder 변수에 저장함-->
+                    <!--justify-content-center을 nav에다 주었더니 적용이 안되어서 ul에 넣으니 적용되었음 -->
                     <!-- 이전버튼 첫 페이지에서는 비 활성화 
                     page.hasPrevious : page객체의 hasPrevious 메서드 호출. true이전 페이지가 있음. false를 리턴하면 이전페이지가 없음
                     -->
                     <li class="page-item"
                         th:classappend="${!page.hasPrevious} ? 'disabled'">
                      <!-- th:classappend="${!page.hasPrevious}" 이전 페이지가 없다면 class에 disabled 속성 추가함 -->
-                        <a class="page-link" th:href="@{|?p=${page.number - 1}|}">&laquo;</a>
+                        <a class="page-link" 
+                        th:href="@{${uriBuilder.replaceQueryParam('p',page.number - 1).toUriString()}}">&laquo;</a>
                         <!-- ||는 문자열 붙이기 page.number - 1 현재 페이지의 -1 => 이전 페이지로 넘어가게 설정 -->
                     </li>
                     <!-- th:each="pageNo : ${#numbers.sequence(), page.totalPages - 1}" 반복문. 페이지 번호만큼 반복하겠다 -->
@@ -65,13 +70,14 @@
                         th:classappend="${pageNo == page.number} ? 'active'">
                     <!-- 현재 페이지(page.number). pageNo는 th:each 반복문에서 선언한 변수이름. 버튼에 있는 번호  -->
                         <a class="page-link"
-                            th:href="@{|?p=${pageNo}|}"
+                            th:href="@{${uriBuilder.replaceQueryParam('p',pageNo).toUriString()}}"
                             th:text="${pageNo + 1}"></a> <!--pageNo가 0부터 시작해서 +1를 함. -->
                     </li>
                     <!-- 다음 버튼 마지막 페이지에서는 비 활성화 -->
                     <!-- th:classappend="${!page.hasNext} ? 'disabled'" 다음페이지가 없다면 class속성값에 비활성화 추가함 -->
                     <li class="page-item" th:classappend="${!page.hasNext} ? 'disabled'">
-                        <a class="page-link" th:href="@{|?p=${page.number + 1}|}">&raquo;</a>
+                        <a class="page-link" 
+                        th:href="@{${uriBuilder.replaceQueryParam('p',page.number + 1).toUriString()}}">&raquo;</a>
                     </li>
                 </ul>
             </nav>

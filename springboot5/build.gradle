@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
-}
+} //dependency-management모듈이 버전번호 관리해준다고 함
 
 group = 'com.itwill'
 version = '0.0.1-SNAPSHOT' // -> 나중에 발표할때 버전 바꿔도 될 것 같다고 하심.
@@ -27,14 +27,46 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+	
+    // Lombok ----------
+    compileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok' // Querydsl 빌드하다 오류나서 추가함
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok' // Querydsl 빌드하다 오류나서 추가함
+    // -----------------
+	
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
-	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+    // Querydsl -----------
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta' 
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+    // --------------------
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+// Querydsl 관련 빌드 옵션 ----- 프로젝트 빌드 폴더$buildDir 구조 선생님이 단순화 시켰다고 함
+def querydslDir = "$buildDir/generated/querydsl" //변수 선언
+
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+} //-> 기존의 자바소스 디렉토리(main.java.srcDirs)에  += [ querydslDir ]를 추가하겠다는 뜻.
+//-> 이 설정으로 이제 이클립스에서 빌드패스를 수동으로 추가할 필요가 없게됨
+//-> 애너테이션 프로세서가 할수있도록? 설정한거라고
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+} //-> 컴파일 할때 소스 디렉토리를 file(querydslDir)로 지정하라고 설정
+
+clean.doLast {
+    file(querydslDir).deleteDir()
+} //-> 클린시에는 querydslDir를 지워버려라 라는 설정
+// -----------------------------

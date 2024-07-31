@@ -13,6 +13,7 @@ import com.itwill.springboot5.domain.Post;
 import com.itwill.springboot5.dto.PostCreateDto;
 import com.itwill.springboot5.dto.PostDetailsDto;
 import com.itwill.springboot5.dto.PostListItemDto;
+import com.itwill.springboot5.dto.PostSearchRequestDto;
 import com.itwill.springboot5.dto.PostUpdateDto;
 import com.itwill.springboot5.repository.PostRepository;
 
@@ -140,8 +141,37 @@ public class PostService {
 		//-> find먼저하고 업데이트 한다고? 이런식으로 한다고 함.
 		//log.info("save 호출 후= {}",entity);
 		
-		
 	}
+	
+	@Transactional(readOnly = true) //-> 읽기전용
+	public Page<PostListItemDto> search(PostSearchRequestDto dto, Sort sort){
+		log.info("search(dto={},sort={})",dto, sort);
+		
+		Pageable pageable = PageRequest.of(dto.getP(), 5, sort);
+		Page<Post> result = null; //-> 콤보박스에 고른거에(dto.getCategory()) 따라 호출하는 메서드와 값이 달라짐. 
+		//if,else if도 된다고 함
+		switch(dto.getCategory()) {
+			case "t":
+				result = postRepo.findByTitleContainingIgnoreCase(dto.getKeyword(), pageable);
+				break;
+			case "c":
+				result = postRepo.findByContentContainingIgnoreCase(dto.getKeyword(), pageable);
+				break;
+			case "tc":
+				result = postRepo.findByTitleOrContent(dto.getKeyword(), pageable);
+				break;
+			case "a":
+				result = postRepo.findByAuthorContainingIgnoreCase(dto.getKeyword(), pageable);
+				break;
+		}
+				
+		
+		log.info("result={}",result);
+		
+		
+		return result.map(PostListItemDto::fromEntity);
+	}
+	
 	
 	
 

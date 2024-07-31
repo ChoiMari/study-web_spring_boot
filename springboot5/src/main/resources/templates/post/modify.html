@@ -6,8 +6,8 @@
     <body>
         <th:block th:replace="~{/layout/fragments :: pageHeader('포스트 수정 페이지')}"></th:block>
         
-        <main>
-            <div class="mt-5 card container">
+        <main class="d-flex justify-content-center">
+            <div class="mt-5 card col-7">
                 <div class="card-body" th:object="${post}">
                     <form id="updateForm" method="post" th:action="@{/post/update}">
                         <div class="mt-2 d-none"> <!-- d-none : 화면에는 보이지 않지만 html로는 작성이 되는 부분 -->
