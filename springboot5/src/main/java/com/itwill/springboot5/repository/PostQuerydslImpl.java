@@ -286,9 +286,11 @@ public class PostQuerydslImpl extends QuerydslRepositorySupport implements PostQ
 		
 		//한 페이지에 표시할 데이터를 select(fetch함)
 		List<Post> list = query.fetch();//query.fetch() 는 List<Post>를 리턴함(Page 타입으로 리턴해 주지않음) 그래서 일단 변수에 담고 처리.
+		log.info("list.size={}",list.size()); //pageable에 한 페이지당 보여줄 개수를 5를 넣었으면 list.size가 5라고 함
 		
 		//전체 레코드 개수를 fetch.(select) 해서 가져옴 - 페이징 처리에 필요해서
 		long count = query.fetchCount(); //-> 페이징 처리전의 전체 레코드 개수 리턴받음
+		log.info("fetch count ={}",count);
 		
 		//Page<T> 객체를 생성 (T는 엔터티 클래스) Page는 인터페이스 Page를 구현한 클래스 PageImpl을 호출함
 		Page<Post> Page = new PageImpl<>(list, pageable, count);
