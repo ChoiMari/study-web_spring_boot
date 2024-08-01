@@ -1,5 +1,7 @@
 package com.itwill.springboot5.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import com.itwill.springboot5.domain.Post;
@@ -40,6 +42,46 @@ public class PostQuerydslImpl extends QuerydslRepositorySupport implements PostQ
 		//-> 장점 : 동적으로 다양한 쿼리 사용 가능함
 		//-> 마이바티스와 다른점. mybatis는 DB에 종속적 (해당하는 DB에 맞게 작성해야)
 		//-> 쿼리dsl은 자바 메서드로 이루어져있기 때문에 DB에 의존적이지 않음
+	}
+
+	@Override // 제목(title)에 포함된 문자열 대소문자 구별없이 검색
+	public List<Post> searchByTitle(String keyword) {
+		log.info("searchByTitle(keyword={})",keyword);
+		QPost post = QPost.post; //Q클래스 타입의 변수 선언
+		
+		// 쿼리 작성하면 됨 extends QuerydslRepositorySupport 상속받아서 여기서 물려주는 메서드 사용가능
+		//-> 물려받은 메서드 from()
+		JPQLQuery<Post> query = from(post); //->여기까지는 select * from Post 라고 생각하면 됨
+		//-> from(); 아규먼트로 Q클래스 타입을 써야함(위에서 선언한 QPost타입의 post를 아규먼트로 넣어줌)
+		//->  JPQLQuery<T> 타입을 리턴해줌 T는 엔터티클래스.
+		
+		//조건(where)절 만듬(where 메서드 호출)
+		query.where(post.title.containsIgnoreCase(keyword)); 
+		//where조건 제목(title)에 포함된 문자열 대소문자 구별없이(containsIgnoreCase) 검색
+		
+		//정렬(order by 절)
+		query.orderBy(post.id.desc());
+		
+		//-> 한줄 한줄 각각 나눠서 썼지만 이렇게도 쓸 수 있다고 함.(연쇄적 호출)
+	//	JPQLQuery<Post> query = from(post).where(post.title.containsIgnoreCase(keyword)).orderBy(post.id.desc());
+		
+		//쿼리를 완성했으면 값을 가져오는건 fetch 사용, fetchJoin(), fetchAll()은 리턴 타입 JPQLQuery이라고. 다시 뭔갈 할수 있다고? 함
+		List<Post> result = query.fetch();
+		
+		return result;
+		//-> 안드로이드 코드 작성방식이 쿼리 dsl과 비슷하다고함.
+	}
+
+	@Override //content(내용)에 포함된 문자열 대소문자 구분없이 검색
+	public List<Post> searchByContent(String keyword) {
+		log.info("searchByContent(keyword={})",keyword);
+		
+		QPost post = QPost.post;
+		
+		JPQLQuery<Post> query = from(post).where(post.content.containsIgnoreCase(keyword)).orderBy(post.id.desc());
+		List<Post> result = query.fetch();
+		
+		return result;
 	}
 	
 	

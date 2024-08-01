@@ -1,5 +1,7 @@
 package com.itwill.springboot5.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.itwill.springboot5.domain.Post;
@@ -26,7 +28,15 @@ import com.itwill.springboot5.domain.Post;
 
 
 
-public interface PostQuerydsl {
+public interface PostQuerydsl { //-> 인터페이스에서 선언하는 메서드는 수식어 public abstract(가 생략되어있음)
+	//id가 일치하는 엔터티 검색
 	Post searchById(Long id);
+	
+	// 제목(title)에 포함된 문자열 대소문자 구별없이 검색
+	//이건 연습용. 굳이 쿼리dsl로 만들 필요없음. 이미 JPA쿼리메서드로 만들었음(특별한 키워드로 메서드 선언만하면 하이버네이트가 자동으로 만들어주는 메서드)
+	List<Post> searchByTitle(String keyword);
+	
+	//content(내용)에 포함된 문자열 대소문자 구분없이 검색
+	List<Post> searchByContent(String keyword); //-> select시에 여러 개 나오니까 List 타입으로 리턴타입 설정한 것.
 
 }
