@@ -45,6 +45,10 @@ public class PostController {
 		//Sort.by("id") id를 기준으로 정렬하는데 .descending()을 붙여서 내림차순(desc)로 정렬함(큰 값이 맨위로 시작하는)
 		model.addAttribute("page", pagingList);
 		
+		//fragment의 pagination에서 사용하기 위한 현재 요청 주소 정보 뷰로 보냄
+		model.addAttribute("baseUrl", "/post/list"); ///post/list 현재 요청주소를 baseUrl이라는 이름으로 뷰로 보냄
+		//뷰에서는 ${baseUrl}로 사용가능
+		
 	}
 	
 	@GetMapping("/create")
@@ -98,6 +102,11 @@ public class PostController {
 		
 		Page<PostListItemDto> result = postSvc.search(dto, Sort.by("id").descending());
 		model.addAttribute("page", result);
+		
+		//fragment의 pagination에서 사용하기 위한 현재 요청 주소 정보 뷰로 보냄
+		model.addAttribute("baseUrl", "/post/search"); 
+		// -> post/search 현재 요청주소를 baseUrl이라는 이름으로 뷰로 보냄
+		//뷰에서는 ${baseUrl}로 사용가능
 		
 		return "post/list"; 
 	}

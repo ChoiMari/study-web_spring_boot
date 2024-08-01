@@ -13,12 +13,13 @@ public class PostQuerydslImpl extends QuerydslRepositorySupport implements PostQ
 	//QuerydslRepositorySupport에는 기본 생성자 없음. 아규먼트만 있는 생성자만 있다고 함
 	//class PostQuerydslImpl 하위 클래스에서 부모의 아규먼트를 갖는 생성자 호출
 	// 엔터티 클래스를 아규먼트로 줌
-	//QuerydslRepositorySupport 상속 받고 PostQuerydsl 인터페이스 구현하겠다 선언함
+	//QuerydslRepositorySupport 상속 받고 PostQuerydsl 인터페이스 구현하겠다 선언함(인터페이스는 구현에 제한이 없음)
+	//상속은 클래스는 중복상속 불가(2개이상 불가함. 1개밖에 못함)
 	public PostQuerydslImpl() {
 		super(Post.class);
 	}
 
-	@Override
+	@Override //-> PostQuerydsl인터 페이스에서 선언한 메서드의 body 구현
 	public Post searchById(Long id) {
 		log.info("searchById(id={})",id); //-> id필드 where절
 		

@@ -54,7 +54,7 @@ tasks.named('test') {
 
 
 // Querydsl 관련 빌드 옵션 ----- 프로젝트 빌드 폴더$buildDir 구조 선생님이 단순화 시켰다고 함
-def querydslDir = "$buildDir/generated/querydsl" //변수 선언
+def querydslDir = "$buildDir/generated/querydsl" //변수 선언 Q클래스들이 만들어지는 디렉토리 설정
 
 sourceSets {
     main.java.srcDirs += [ querydslDir ]
@@ -64,7 +64,7 @@ sourceSets {
 
 tasks.withType(JavaCompile) {
     options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-} //-> 컴파일 할때 소스 디렉토리를 file(querydslDir)로 지정하라고 설정
+} //-> 컴파일 할때 소스 디렉토리를 file(querydslDir)로 지정하라고 설정(컴파일시에 querydslDir도 같이 컴파일하라고 설정)
 
 clean.doLast {
     file(querydslDir).deleteDir()
