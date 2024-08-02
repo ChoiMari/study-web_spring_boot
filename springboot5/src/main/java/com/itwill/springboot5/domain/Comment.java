@@ -20,7 +20,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE) // 외부공개 X : private로 설정
 @Builder 
-@Getter @ToString 
+@Getter @ToString(callSuper = true) //->(callSuper = true) :toString을 만들 때 부모클래스의 필드도 이용하는 애너테이션의 속성. 
 @EqualsAndHashCode(callSuper = true) //-> 객체끼리 비교 위해서. 수퍼클래스도 같이 호출하겠다라고 설정함
 @Entity @Table(name = "COMMENTS")
 public class Comment extends BaseTimeEntity { //extends BaseTimeEntity : 생성시간, 수정시간 여기에

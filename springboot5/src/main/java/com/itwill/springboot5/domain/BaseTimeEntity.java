@@ -7,6 +7,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
@@ -35,9 +37,11 @@ public class BaseTimeEntity {
 	//다른 엔터티들은 상속 받아서 쓴다고 함. 그럼 전부 이 2가지 속성을 갖는다고.
 	
 	@CreatedDate //-> 엔터티 (최초)생성 시간을 저장하는 필드임을 알려주는 애너테이션
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:SS")
 	private LocalDateTime createdTime;
 	
 	@LastModifiedDate //-> 엔터티 (최종) 수정 시간을 저장하는 애너테이션
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:SS")
 	private LocalDateTime modifiedTime;
 
 } //-> 예약 사이트에서는 자동기록 아니기 때문에 여기 다 넣음 안된다고. 따로 하라고 하심. 예약 시간 이런것들..
