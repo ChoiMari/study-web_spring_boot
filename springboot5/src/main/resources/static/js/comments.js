@@ -120,8 +120,19 @@
             console.log(response);
             //댓글 목록을 HTML로 작성 - > 메서드 호출로 대체함
             currentPageNo = response.data.number; //currentPageNo 현재 페이지 번호값을 현재보고있는 페이지 정보값으로 변경함
+            totalPages = response.data.totalPages; // 전체 페이지 수를 업데이트
             makeCommentElements(response.data.content, response.data.number); //response.data.number 이게 현재 페이지 정보
             //-> response.data.content 이게 댓글 목록 정보
+            //TODO - 더보기 버튼 상태 결정
+             // 현재 페이지가 마지막 페이지인지 확인하여 "더보기" 버튼의 상태를 결정
+                if (currentPageNo + 1 >= totalPages) {
+                    // 마지막 페이지라면 "더보기" 버튼을 숨김
+                    btnMoreComments.style.display = 'none';
+                } else {
+                    // 마지막 페이지가 아니라면 "더보기" 버튼을 보임
+                    btnMoreComments.style.display = 'block';
+                }
+           //TODO 끝
             
         })
         .catch((error) => console.log(error));
