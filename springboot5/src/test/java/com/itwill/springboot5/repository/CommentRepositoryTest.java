@@ -37,7 +37,7 @@ public class CommentRepositoryTest {
 		list.forEach(System.out::println);
 	}
 	
-	@Test //-> save() : insert 잘 시키는지 test (save() 메서드는 @Id 필드가 null 이면 insert실행하고 값이 있으면 UPDATE실행.)
+	//@Test //-> save() : insert 잘 시키는지 test (save() 메서드는 @Id 필드가 null 이면 insert실행하고 값이 있으면 UPDATE실행.)
 	public void testSave() { 
 		Comment entity = Comment.builder().post(Post.builder().id(2L).build())
 							.ctext("댓글 내용 test").writer("admin Comment test").build();
@@ -54,6 +54,27 @@ public class CommentRepositoryTest {
 		log.info("save 후 entity={}",entity);
 		//save 후 entity=Comment(id=2, ctext=댓글 내용 test, writer=admin Comment test)
 				
+	}
+	
+	//@Test
+	public void testUpdate() {
+		Comment entity = commentRepo.findById(1L).orElseThrow();
+		log.info("findById 결과:{}",entity);
+		
+		entity.update("댓글 업데이트 test 잘될까..??");
+		
+		log.info("update 호출 후: {}",entity);
+		
+		commentRepo.save(entity);
+		
+		log.info("save 호출 후 : {}",entity);
+
+	}
+	
+	@Test 
+	public void testDelete() {
+		commentRepo.deleteById(2L); //-> 작동 원리 : 아규먼트로 넣은 Id값을 먼저 찾은 다음에
+		//값이 있으면 delete sql을 실행함.
 	}
 	
 	
