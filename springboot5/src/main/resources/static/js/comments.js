@@ -120,17 +120,18 @@
             console.log(response);
             //댓글 목록을 HTML로 작성 - > 메서드 호출로 대체함
             currentPageNo = response.data.number; //currentPageNo 현재 페이지 번호값을 현재보고있는 페이지 정보값으로 변경함
-            totalPages = response.data.totalPages; // 전체 페이지 수를 업데이트
+         //   totalPages = response.data.totalPages; // 전체 페이지 수를 업데이트
             makeCommentElements(response.data.content, response.data.number); //response.data.number 이게 현재 페이지 정보
             //-> response.data.content 이게 댓글 목록 정보
-            //TODO - 더보기 버튼 상태 결정
-             // 현재 페이지가 마지막 페이지인지 확인하여 "더보기" 버튼의 상태를 결정
-                if (currentPageNo + 1 >= totalPages) {
-                    // 마지막 페이지라면 "더보기" 버튼을 숨김
-                    btnMoreComments.style.display = 'none';
+            
+            //할일 더보기 버튼 상태 결정
+            // 현재 페이지 번호보다 페이지 개수가 더 많으면 댓글 더보기 버튼을 보여줌
+            const divBtnMore = document.querySelector('div#divBtnMore'); //-> 더보기 버튼 찾음
+                if (currentPageNo + 1 < response.data.totalPages) { //response.data.totalPages:전체 페이지 수 
+                    divBtnMore.classList.remove('d-none'); //->  class속성에 d-nine을 제거하여 더보기 버튼이 보이게 됨.
                 } else {
-                    // 마지막 페이지가 아니라면 "더보기" 버튼을 보임
-                    btnMoreComments.style.display = 'block';
+                    // 현재 페이지보다 페이지 개수가 작거나 같으면 더보기 버튼을 숨김
+                     divBtnMore.classList.add('d-none');//->  class속성에 d-nine을 추가하여 더보기 버튼이 안 보이게 됨.
                 }
            //TODO 끝
             
@@ -258,17 +259,8 @@ function updateComment(event) {
             .then((response) => {
                 console.log(response);
 
-                // TODO: 필요하다면 업데이트된 텍스트를 span으로 다시 변환하여 표시
-            //    const updatedSpan = document.createElement('span');
-            //    updatedSpan.className = 'p-3';
-             //   updatedSpan.setAttribute('data-id', id);
-               // updatedSpan.textContent = ctext;
-             //   textarea.parentNode.replaceChild(updatedSpan, textarea);
-
-                // 버튼 텍스트를 다시 '수정'으로 변경
-             //   event.target.textContent = '수정';
-             alert('댓글이 수정되었습니다.');
-             getAllComments(0);
+             alert(`#${id}번의 댓글이 수정되었습니다.`);
+             getAllComments(0);//-> 첫 번째 페이지의 댓글 목록 갱신
             })
             .catch((error) => {
                 console.log(error);

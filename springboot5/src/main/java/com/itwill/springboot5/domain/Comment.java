@@ -42,7 +42,7 @@ public class Comment extends BaseTimeEntity { //extends BaseTimeEntity : 생성�
 	private String writer;
 	
 	
-	public Comment update(String ctext) {
+	public Comment update(String ctext) { //-> setter메서드와 같음
 		this.ctext = ctext;
 		return this;
 	}	

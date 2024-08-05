@@ -72,12 +72,18 @@ public class CommentRestController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Long> updateComment(@RequestBody CommentUpdateDto dto){
-		log.info("updateComment(dto={})",dto);
+	public ResponseEntity<Long> updateComment(@PathVariable(name = "id") Long id, @RequestBody CommentUpdateDto dto){
+		//@RequestBody -> 에이작스 데이터를 전달 받을 때 사용.(요청 바디안에 있는걸 dto객체에 넣고싶을 때)
+		//-> 쿼리 스트링안에서 값 읽어올때 @RequestParam 
+		//PathVariable 값 읽어올때 @PathVariable
+		
+		log.info("updateComment(id={},dto={})",id,dto);
 		
 		commentSvc.update(dto);
 		
-		return ResponseEntity.ok(dto.getId());
+		return ResponseEntity.ok(dto.getId()); // id를 넘겨도 됨. 업데이트한 댓글의 아이디를 응답으로 보냄
+		//-> 업데이트한 댓글 자체를 넘길수도 있음 ResponseEntity<Comment>로 리턴타입으로 바꾸고 
+		//commentSvc.update(dto);에서 Comment객체를 리턴 받도록 변경해서 리턴 보내면 된다고 함.
 	}
 
 }
