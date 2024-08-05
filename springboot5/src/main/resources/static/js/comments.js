@@ -161,8 +161,8 @@
                 
                     <!-- 오른쪽에 위치한 버튼들 -->
                     <div class="ms-auto">
-                        <button class="btnDelete btn btn-light btn-sm">삭제</button>
-                        <button class="btnUpdate btn btn-light btn-sm">수정</button>
+                        <button class="btnDelete btn btn-light btn-sm" data-id="${comment.id}">삭제</button>
+                        <button class="btnUpdate btn btn-light btn-sm" data-id="${comment.id}">수정</button>
                     </div>
                 </div>
              <div>
@@ -179,6 +179,34 @@
             divComments.innerHTML += htmlStr;
         }
         
+        //중요!!) 댓글 삭제, 수정 버튼들의 이벤트 리스너는 버튼들이 생겨난 이후에 등록(코드 위치 중요함)해야 함
+        //모든 button,btnDelete 버튼들을 찾아서 클릭 이벤트 리스너를 등록.
+        const btnDeletes = document.querySelectorAll('button.btnDelete'); //-> 클래스 이름으로 버튼들을 찾음
+        btnDeletes.forEach((btn) => { //-> 버튼들을 1개씩 꺼내서 클릭 이벤드 리스너 등록함(클릭시 실행 코드는 함수 호출 deleteComment)
+            btn.addEventListener('click', deleteComment);
+        });
+        
+    }
+    
+    function deleteComment(event){ //필요시에 event(이벤트객체) 선언해서 사용함.
+       // console.log(event);
+      //  console.log(event.target); //-> event.target 필요함 commentId찾기 위해서.
+      if(!confirm('삭제하시겠습니까?')){
+        return; //-> 아니오 클릭시 이벤트 종료.
+      }
+      
+      //네 라고 클릭시 실행되는 코드
+      const id = event.target.getAttribute('data-id'); //.getAttribute: 속성값을 읽음. 삭제할 댓글 아이디 commentId
+      const uri = `/api/comment/${id}`; // 삭제 Ajax 요청을 보낼 주소. ${id}: 위의 이벤트객체.타겟에서 찾은 댓글 id값
+      axios.delete(uri)
+      .then((response) => {
+        console.log(response);
+        //댓글 삭제 성공시 실행되는 코드
+        alert(`#${id}번 댓글 삭제 성공`);
+        getAllComments(0); // 댓글 목록 갱신(0페이지부터)
+      }) //-> 성공 응답이 오면 할일
+      .catch((error)=>console.log(error)); //-> 실패 응답시 할일
+      
     }
 
  });

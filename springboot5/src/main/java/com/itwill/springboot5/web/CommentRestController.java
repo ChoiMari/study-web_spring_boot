@@ -2,6 +2,7 @@ package com.itwill.springboot5.web;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +52,21 @@ public class CommentRestController {
 		Page<Comment> data = commentSvc.readCommentList(postId, pageNo);
 		
 		return ResponseEntity.ok(data); //-> 응답 성공인 경우에 data(페이징 처리된 댓글 목록)를 리턴 
+	}
+	
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Long> deleteComment(@PathVariable(name = "id")Long id){
+		//@PathVariable(name = "id")Long id : @DeleteMapping("/{id}")에 있는 PathVariable을 Long타입의 id에 넣어주세요 라는 의미
+		log.info("deleteComment(id={})",id);
+		
+		commentSvc.delete(id); //서비스에서 삭제에 사용되는 sql메서드가 리턴타입이 void라서 리턴값 받지 않음.
+		//-> 예외발생 없다면 삭제 성공.
+		
+		return ResponseEntity.ok(id); 
+		//리턴타입을 ResponseEntity<Long>로 한 이유 : 삭제한 commentId(댓글아이디)를 응답으로 보내기 위해서.
+		//삭제 성공시 alert(`#${id}번 댓글 삭제 성공`); 로 alert으로 확인해보려고 설정했기 때문에.
+		
 	}
 
 
