@@ -167,7 +167,7 @@
                 </div>
              <div>
                 <div class="my-3">
-                    <span class="p-3">${comment.ctext}</span>
+                    <span data-id="${comment.id}" class="p-3">${comment.ctext}</span>
                 </div>
              </div>
            </div>`;
@@ -184,6 +184,12 @@
         const btnDeletes = document.querySelectorAll('button.btnDelete'); //-> 클래스 이름으로 버튼들을 찾음
         btnDeletes.forEach((btn) => { //-> 버튼들을 1개씩 꺼내서 클릭 이벤드 리스너 등록함(클릭시 실행 코드는 함수 호출 deleteComment)
             btn.addEventListener('click', deleteComment);
+        });
+        
+        //수정 버튼 찾고 클릭 이벤트 리스너 등록
+        const btnUpdates = document.querySelectorAll('button.btnUpdate'); //-> 클래스 이름으로 버튼들을 찾음
+        btnUpdates.forEach((btn) => { //-> 버튼 1개씩 각각 이런일을 하겠다 설정함
+           btn.addEventListener('click', updateComment);  //-> 각각의 수정 버튼에 클릭 이벤트 등록. 클릭시 updateComment 함수 호출함
         });
         
     }
@@ -208,6 +214,67 @@
       .catch((error)=>console.log(error)); //-> 실패 응답시 할일
       
     }
+    
+    
+ //댓글 수정 버튼 클릭시 호출 되는 함수   
+function updateComment(event) {
+    const id = event.target.getAttribute('data-id');
+    const span = document.querySelector(`span.p-3[data-id="${id}"]`);
+
+    if (span) {
+        const commentText = span.textContent;
+
+        // 기존 span을 textarea로 변경
+        const textarea = document.createElement('textarea');
+        textarea.className = 'form-control';
+        textarea.setAttribute('data-id', id);
+        textarea.value = commentText;
+        span.parentNode.replaceChild(textarea, span);
+
+        // 버튼 텍스트를 '수정 완료'로 변경
+        event.target.textContent = '수정 완료';
+        return; // 여기서 return하여 이후 코드가 실행되지 않도록 합니다.
+    }
+
+    // 버튼 텍스트가 '수정 완료'인 상태에서만 댓글 저장 로직 실행
+    if (event.target.textContent === '수정 완료') {
+        const textarea = document.querySelector(`textarea[data-id="${id}"]`);
+        const ctext = textarea.value.trim();
+
+        if (ctext === '') {
+            alert('댓글 내용을 입력하세요.');
+            return;
+        }
+
+        if (!confirm('변경된 댓글을 저장 하시겠습니까?')) {
+            return;
+        }
+
+        // Ajax 요청 보내기
+        const uri = `/api/comment/${id}`;
+        const data = { id, ctext };
+
+        axios.put(uri, data)
+            .then((response) => {
+                console.log(response);
+
+                // TODO: 필요하다면 업데이트된 텍스트를 span으로 다시 변환하여 표시
+            //    const updatedSpan = document.createElement('span');
+            //    updatedSpan.className = 'p-3';
+             //   updatedSpan.setAttribute('data-id', id);
+               // updatedSpan.textContent = ctext;
+             //   textarea.parentNode.replaceChild(updatedSpan, textarea);
+
+                // 버튼 텍스트를 다시 '수정'으로 변경
+             //   event.target.textContent = '수정';
+             alert('댓글이 수정되었습니다.');
+             getAllComments(0);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+}
 
  });
  

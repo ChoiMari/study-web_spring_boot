@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itwill.springboot5.domain.Comment;
 import com.itwill.springboot5.domain.Post;
 import com.itwill.springboot5.dto.CommentRegisterDto;
+import com.itwill.springboot5.dto.CommentUpdateDto;
 import com.itwill.springboot5.repository.CommentRepository;
 import com.itwill.springboot5.repository.PostRepository;
 
@@ -68,6 +69,15 @@ public class CommentService {
 		log.info("delete(id={})",id);
 		
 		commentRepo.deleteById(id);
+	}
+	
+	@Transactional //-> 이걸 써야지 update메서드 호출하면 update됨
+	public void update(CommentUpdateDto dto) {
+		log.info("update(dto={})",dto);
+		Comment entity = commentRepo.findById(dto.getId()).orElseThrow();
+		log.info("findById 결과 = {}", entity);
+		entity.update(dto.getCtext());
+		log.info("update 호출 후= {}",entity);
 	}
 
 }
