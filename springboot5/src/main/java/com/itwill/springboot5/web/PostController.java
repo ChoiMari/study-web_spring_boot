@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class PostController {
 	
 	private final PostService postSvc;
 	
-	@GetMapping("/list")
+	@GetMapping("/list") //-> 로그인 인증 필요 X . 목록보기
 	public void list(Model model,@RequestParam(name = "p", defaultValue = "0") int pageNo) {
 		//뷰에서 th:href="@{|?p=${page.number - 1}| 이렇게 설정했음. 리퀘스트 파라미터 이름 p. 
 		//리퀘스트 파라미터 p값이 없을땐(defaultValue = "0") 0으로 줌
@@ -51,11 +52,17 @@ public class PostController {
 		
 	}
 	
+	@PreAuthorize("hasRole('USER')") //새 글 작성 페이지에 접근 권한 설정함. 로그인 여부 검사. 
+	//아규먼트로는 호출하는 메서드 이름을 문자열로 써주면 된다고 함. 
+	//->@PreAuthorize("authenticated()") : 권한(role)에 상관 없이 아이디와 비밀번호로만 인증.
+	// 권한까지 부여하려면@PreAuthorize("hasRole('USER')")  -> ''작은 따음표로 권한을 아규먼트로 주어야한다고 함
+	//-> role(권한)이 일치하는 아이디/비밀번호 인증.
 	@GetMapping("/create")
 	public void create() {
 		log.info("GET 요청 방식 create()");	
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping("/create")
 	public String create(PostCreateDto dto) { //오버로딩 //(@ModelAttribute PostCreateDto dto)라고 안써도 읽음.
 		//뷰에서 설정한 name속성값이 dto의 필드이름과 같아서 리퀘스트 파라미터 이름으로 setter메서드를 찾는다고. 
@@ -68,6 +75,7 @@ public class PostController {
 	}
 	
 	//상세보기 , 수정하기 페이지 요청 처리 주소
+	@PreAuthorize("hasRole('USER')") //-> 요청주소 "/details","/modify 두 개의 매핑에 대해서 로그인+ 권한 일치 인증해야 페이지 접근가능 적용함
 	@GetMapping({"/details","/modify"}) //-> 하나의 컨트롤러가 2개의 요청주소 처리(get방식)
 	public void details(Model model, @RequestParam(name = "id") Long id) {
 		log.info("GET details(id={})",id);
@@ -78,6 +86,7 @@ public class PostController {
 	// 요청주소가 /modify 로 들어오면 post 폴더의 modify.html이 됨.
 	
 	//상세보기에서 삭제버튼 클릭시 요청 처리 주소
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/delete")
 	public String delete(@RequestParam(name = "id") Long id) { // 오버로딩
 		log.info("delete(id={})",id);
@@ -86,6 +95,7 @@ public class PostController {
 		return "redirect:/post/list";
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping("/update")
 	public String modify(PostUpdateDto dto) {
 		log.info("PostUpdateDto(dto={})",dto);

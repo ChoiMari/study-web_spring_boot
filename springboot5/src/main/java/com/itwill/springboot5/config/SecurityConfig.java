@@ -2,7 +2,10 @@ package com.itwill.springboot5.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +23,8 @@ import org.springframework.security.web.SecurityFilterChain;
 //참고 bin클래스에서 붙일수있는 @애너테이션들 :
 //@Component @Controller @RestController @Service @Repository @Configuration 
 //-> 용도에 맞게 사용하면 된다고 함.
+
+@EnableMethodSecurity  //-> 각각의 컨트롤러 메서드에서 인증(로그인), 권한 설정을 하기 위해서 사용하는 애너테이션
 public class SecurityConfig {
 
 	//Spring Security 5 버전부터 비밀번호는 반드시 암호화를 해야만 한다고 함
@@ -108,8 +113,14 @@ public class SecurityConfig {
 		http.formLogin(Customizer.withDefaults());//-> import할때 곧 없어질 메서드 사용하지 말라고 함
 		//TODO : 우리가 만드는 Custom 로그인 페이지(HTML)를 사용하도록 나중에 바꿔본다고 함
 		
-		//페이지 접근 권한, 인증 구성
-		http.authorizeHttpRequests((auth)-> 
+		//** 페이지 접근 권한, 인증 구성 : 아래의 1 또는 2 방법 중 한 가지를 선택해서 사용하면 됨.
+		// 1. HttpSecurity.authorizeHttpRequests(Customizer customizer) 메서드에서 설정
+		// -> 장점 : 한곳에서 모든 설정을 구성할 수 있음.
+		//- > 단점 :  새로운 요청 경로가 생길때 마다 이 파일을 찾아서 설정 구성 코드를 수정해야 한다.
+		// 2. 컨트롤러 메서드에서 애너테이션으로 설정
+		// (1) SecurityConfig 빈에 @EnableMethodSecurity 애너테이션을 설정하고,
+		// (2) 각각 컨트롤러 메서드에서 @PreAuthorize 또는 @PostAuthorize 애너테이션으로 설정함.
+	/*	http.authorizeHttpRequests((auth)-> 
 		//		auth.anyRequest().authenticated());// 모든 요청주소anyRequest()는 전부 다 authenticated() 인증된 사용자만 가능하다라고 설정.
 		// 인증관련 메서드들을 가지고 있는 객체가 람다표현식으로 쓴 변수에 전달이 된다고 그래서 그 객체. 으로 메서드 호출해서 설정하면 된다고함
 		//auth.anyRequest().authenticated() :  모든 요청 주소에 대해서 role(권한)에 상관 없이 아이디/비밀번호 인증(로그인)을 하는 경우에만 접근 가능하게 설정
@@ -123,8 +134,8 @@ public class SecurityConfig {
 		
 		//로그인이 필요한 페이지와 그렇지 않은 페이지를 구분해서 접근 가능하도록 설정을 구성함.
 		auth.requestMatchers("/post/create","/post/details","/post/modify",
-				"/post/delete","/post/update","/api/comment/*") //* 모든이라는 뜻(pathvariable을 *로 처리함)
-		//-> 요청 주소들을 나열하면 된다고 함. 아규먼트로 넣은 요청주소는
+				"/post/delete","/post/update","/api/comment/**") //** (해당 요청주소의 하위주소까지 포함해서)모든이라는 뜻(pathvariable을 **로 처리함)
+		//-> 로그인이 필요한 요청 주소들을 나열하면 된다고 함. 아규먼트로 넣은 요청주소는
 		//.authenticated() //->로그인 인증된 사용자만 해당 요청을 처리할 수 있도록 설정. 권한은 상관 없다(아이디랑 패스워드만 확인)
 		//.authenticated()대신에 .hasAnyRole("권한")를 사용하면 아이디,패스워드 +(아규먼트로 넣은)권한까지 확인해서 접근권한 설정
 		// 메서드 호출 순서 중요하다고 함.
@@ -136,7 +147,7 @@ public class SecurityConfig {
 		//해당 요청을 인증이나 인가 없이 모두 허용하겠다는 의미
 		);
 		
-		
+		*/
 		return http.build(); //->리턴 타입 DefaultSecurityFilterChain(하위클래스) : SecurityFilterChain가 상위(수퍼클래스) 타입
 	}
 }

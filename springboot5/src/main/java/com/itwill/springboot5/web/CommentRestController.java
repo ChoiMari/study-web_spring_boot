@@ -2,6 +2,7 @@ package com.itwill.springboot5.web;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ public class CommentRestController {
 
 	private final CommentService commentSvc;
 	
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping //-> axios로 부터 dto전달 받아서 DB에 insert시킴
 	public ResponseEntity<Comment> registerCommnet(@RequestBody CommentRegisterDto dto){
 		//리턴 타입으로 쓴 ResponseEntity<Comment> : 생성된 Comment 객체를 리턴한다는 뜻
@@ -45,6 +47,7 @@ public class CommentRestController {
 		return ResponseEntity.ok(entity);
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/all/{postId}") //->@PathVariable(name = "postId") Long postId
 	public ResponseEntity<Page<Comment>> getCommentList(@PathVariable(name = "postId") Long postId,
 			@RequestParam(name="p",defaultValue = "0") int pageNo){
@@ -56,7 +59,7 @@ public class CommentRestController {
 		return ResponseEntity.ok(data); //-> 응답 성공인 경우에 data(페이징 처리된 댓글 목록)를 리턴 
 	}
 	
-	
+	@PreAuthorize("hasRole('USER')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Long> deleteComment(@PathVariable(name = "id")Long id){
 		//@PathVariable(name = "id")Long id : @DeleteMapping("/{id}")에 있는 PathVariable을 Long타입의 id에 넣어주세요 라는 의미
@@ -71,6 +74,7 @@ public class CommentRestController {
 		
 	}
 	
+	@PreAuthorize("hasRole('USER')")
 	@PutMapping("/{id}")
 	public ResponseEntity<Long> updateComment(@PathVariable(name = "id") Long id, @RequestBody CommentUpdateDto dto){
 		//@RequestBody -> 에이작스 데이터를 전달 받을 때 사용.(요청 바디안에 있는걸 dto객체에 넣고싶을 때)
