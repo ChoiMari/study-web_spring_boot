@@ -128,7 +128,7 @@
             // 현재 페이지 번호보다 페이지 개수가 더 많으면 댓글 더보기 버튼을 보여줌
             const divBtnMore = document.querySelector('div#divBtnMore'); //-> 더보기 버튼 찾음
             //    if (currentPageNo + 1 < response.data.totalPages) { //response.data.totalPages:전체 페이지 수 
-                 if (!response.data.last) {
+                 if (!response.data.last) { //-> 현재보고 있는 페이지가 마지막 페이지가 아니면 실행
                     divBtnMore.classList.remove('d-none'); //->  class속성에 d-nine을 제거하여 더보기 버튼이 보이게 됨.
                 } else {
                     // 현재 페이지보다 페이지 개수가 작거나 같으면 더보기 버튼을 숨김
