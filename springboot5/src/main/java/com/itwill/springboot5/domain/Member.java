@@ -35,7 +35,7 @@ import lombok.ToString;
 //onlyExplicitlyIncluded 속성 : @EqualsAndHashCode.Include 애너테이션이 설정된 필드만 사용할 것인지 여부. true값주면 그렇게 사용하겠다. false 그렇게 사용안하겠다
 //callSuper 속성 : 수퍼(부모)클래스의 equals(),hashCode() 메서드를 사용할 것인지 여부. - 사용할 것이면 true, 사용 X false
 @Entity
-@Table(name = "MEMBERS")
+@Table(name = "MEMBERS") //엔터티 클래스(Member)가 DB에 있는 실제 테이블 이름(MEMBERS)과 달라서 사용함.
 public class Member extends BaseTimeEntity {
 	
 	@Id
@@ -77,8 +77,13 @@ public class Member extends BaseTimeEntity {
 		return this;
 	}
 	
+	public Member removeRole(MemberRole role) {
+		roles.remove(role); //-> Set<>에서 원소(role) 1개를 찾아서 삭제.
+		return this;
+	}
+	
 	public Member clearRoles() {
-		roles.clear(); //-> Set<엘리먼트타입> 의 모든 원소를 지움
+		roles.clear(); //-> Set<엘리먼트타입> 의 모든 원소를 전부 지움
 		return this;
 	}
 	
