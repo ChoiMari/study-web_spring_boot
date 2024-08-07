@@ -52,9 +52,9 @@ public class PostController {
 		
 	}
 	
-	@PreAuthorize("hasRole('USER')") //새 글 작성 페이지에 접근 권한 설정함. 로그인 여부 검사. 
+	@PreAuthorize("hasRole('USER')") //새 글 작성 페이지에 접근 권한 설정함. 로그인 여부 검사 + USER권한 검사
 	//아규먼트로는 호출하는 메서드 이름을 문자열로 써주면 된다고 함. 
-	//->@PreAuthorize("authenticated()") : 권한(role)에 상관 없이 아이디와 비밀번호로만 인증.
+	//->@PreAuthorize("isAuthenticated()") : 권한(role)에 상관 없이 아이디와 비밀번호로만 인증.(로그인만 성공하면 요청주소에 접근 가능함)
 	// 권한까지 부여하려면@PreAuthorize("hasRole('USER')")  -> ''작은 따음표로 권한을 아규먼트로 주어야한다고 함
 	//-> role(권한)이 일치하는 아이디/비밀번호 인증.
 	@GetMapping("/create")

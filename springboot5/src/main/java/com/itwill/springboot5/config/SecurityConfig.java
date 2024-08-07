@@ -95,7 +95,7 @@ public class SecurityConfig {
 	//리턴 타입 SecurityFilterChain를 구현하는 클래스 객체를 리턴해주어야함
 		
 		// 시큐리티 관련 설정들을 구성
-		// CSRF(Cross Site Request Forgery) 기능을 비활성화 : (활성화시키고 쓰는게 좋다고 함. 보완유지하려면 활성화시키는게 좋다고)
+		// CSRF(Cross Site Request Forgery) 기능을 비활성화 : (활성화시키고 쓰는게 좋다고 함. 보안유지하려면 활성화시키는게 좋다고)
 		//-> 해킹 관련 기술이라고 함.
 		//로그인할때 해킹 방지하기 위해서 숨기는 input필드 만들어서 거기다 보안키(인증키) 넣는거라고..(개발자도구에선 볼수있다고)
 		//보안키 일치 비교(가짜 사이트에서 온건지 아닌지 확인함) 기본적으로는 활성화되어져 있다고함. 특별히 설정하지 않아도
@@ -106,12 +106,16 @@ public class SecurityConfig {
 		
 		// 만약, CSRF 기능을 활성화한 경우에는,
 		//Ajax POST/PUT/DELETE(정보 전달받는거 클라이언트쪽에서 서버로 받는 정보가 있는) 요청에서 CSRF 토큰을 서버로 전송하지 않으면
-		// HTTP 403 에러가 발생함 -> 그래서 비활성화 한다는것(사실은 활성화하는게 더 보완에 좋지만, 우리가 만든 댓글기능은 이걸 고려하지 않아서)
+		// HTTP 403 에러가 발생함 -> 그래서 비활성화 한다는것(사실은 활성화하는게 더 보안에 좋지만, 우리가 만든 댓글기능은 이걸 고려하지 않고 구현했기 때문)
 		http.csrf((csrf)->csrf.disable()); //->아규먼트. 람다 표현식으로 넣어야 한다고 함 //-> CSRF 비활성화 시킴
 		
 		//로그인 페이지(폼) 설정 - 스프링 시큐리티에서 제공하는 기본 HTML 페이지를 사용하겠다 설정
-		http.formLogin(Customizer.withDefaults());//-> import할때 곧 없어질 메서드 사용하지 말라고 함
-		//TODO : 우리가 만드는 Custom 로그인 페이지(HTML)를 사용하도록 나중에 바꿔본다고 함
+		//(기본적으로 제공되는 로그인페이지 사용하겠다 설정)
+		//http.formLogin(Customizer.withDefaults());//-> import할때 곧 없어질 메서드 사용하지 말라고 함
+		//** 우리가 만드는 Custom 로그인 페이지(HTML)를 사용하도록 바꿈(기본제공 로그인 페이지가 아니라 우리가 만든 로그인 페이지 사용)
+		http.formLogin((login) -> login.loginPage("/member/signin")); //-> 람다 표현식 1문장만 쓸 경우에는 {}생략 가능
+		//아큐먼트로 넣은 요청주소/member/signin는 컨트롤러 이름. /member/signin 페이지로 간다는 뜻.
+		//인증이 필요한 페이지를 /member/signin로 리다이렉트 하겠다는 뜻.
 		
 		//** 페이지 접근 권한, 인증 구성 : 아래의 1 또는 2 방법 중 한 가지를 선택해서 사용하면 됨.
 		// 1. HttpSecurity.authorizeHttpRequests(Customizer customizer) 메서드에서 설정
