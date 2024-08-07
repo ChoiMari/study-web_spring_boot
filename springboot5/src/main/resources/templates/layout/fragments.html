@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thyemleaf.org/thymeleaf-extras-springsecurity6">
+    <!-- sec : 시큐리티라는 뜻 sec라고 하는 접두사를 태그 안에서 오류 없이 사용할 수 있음 -->
 	<head>
         <th:block th:fragment="documentHeader">
             <meta charset="utf-8">
@@ -34,9 +36,25 @@
                     <li class="nav-item">
                       <a class="nav-link" th:href="@{/post/create}">새 포스트</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link disabled">TODO</a>
-                    </li>
+                    <!-- 로그인 여부에 따라서 다르게 보이게 설정함. -->
+                    <th:block sec:authorize="isAnonymous()"> <!-- 로그인 안된 상태 -->
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/member/signin}">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/member/signup}">회원가입</a>
+                        </li>
+                    </th:block>
+                    <th:block sec:authorize="isAuthenticated()"><!-- 로그인 된 상태 -->
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/logout}">
+                                <span sec:authentication="name" class="text-secondary"></span><!-- 로그인한 아이디 : sec:authentication="name"-->
+                                <span class="mx-1 text-primary">로그아웃</span>
+                            </a>
+                            <!-- 스프링 시큐리티에서 기본적으로 제공되는 로그아웃 기본 처리 요청 주소 "@{/logout}" -->
+                            <!-- 더 많은 속성이 궁금하면 타임리프 홈페이지에서 찾아보면 된다고 함 -->
+                        </li>
+                    </th:block>
                   </ul>
                 </div>
               </div>
