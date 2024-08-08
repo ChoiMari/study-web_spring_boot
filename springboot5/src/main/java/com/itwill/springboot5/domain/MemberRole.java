@@ -5,10 +5,11 @@ public enum MemberRole {
 	//그냥 USER로 선언 했을 경우에는 public static final MemberRole USER = new MemberRole();와 같음(기본생성자 호출)
 	//enum에서 나열한 상수들은 앞에 public static final MemberRole와 뒤에 = new MemberRole();가 생략 되어 있는 것.
 
-	ADMIN("ROLE_ADMIN");//-> public static final MemberRole USER = new MemberRole("ROLE_ADMIN");와 같음
+	ADMIN("ROLE_ADMIN"),//-> public static final MemberRole USER = new MemberRole("ROLE_ADMIN");와 같음
 	//->("ROLE_ADMIN")의 의미 : 아규먼트가 있는 생성자 호출. 문자열(ROLE_ADMIN이라는 문자열) 1개를 가지고 있는 객체
 	
 	//이외의 권한 종류를 더 만들고 싶으면 여기서 나열해서 사용하면 된다고 함.
+	GUEST("ROLE_GUEST");
 	
 	private String authority;
 	

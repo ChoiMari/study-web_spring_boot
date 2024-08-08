@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.itwill.springboot5.domain.Member;
@@ -70,8 +71,8 @@ public class MemberRepositoryTest {
 		//m.getRoles() : [USER, ADMIN]
 	}
 	
-	@Test 
-	@Transactional //->Member 클래스(엔터티클래스)에서 @ElementCollection(fetch = FetchType.LAZY)로 선언한게 있어서 사용함. 
+//	@Test 
+//	@Transactional //->Member 클래스(엔터티클래스)에서 @ElementCollection(fetch = FetchType.LAZY)로 선언한게 있어서 사용함. (JUnit test에서는 필요함)
 	public void testFindAll() {
 		List<Member> list = memberRepo.findAll(); //findAll() : select * from members sql문을 실행하는 메서드
 		//-> members 테이블과 member_roles 테이블에서 정보를 취합
@@ -79,6 +80,16 @@ public class MemberRepositoryTest {
 		list.forEach((member) -> log.info("{},{}", member, member.getRoles()));
 	}
 	
+	@Test 
+	//findByUsername() 메서드 선언 앞에 @EntityGraph(attributePaths = "roles")라고 써서
+	//@Transactional 없이도 getRoles()값도 잘 가져옴(JUnit test에 필요한 것)
+	public void testFindByUsername() {
+		Member test1 = memberRepo.findByUsername("test1").get(); //-> 값이 있으면 값을 리턴. 값이 없으면 예외를 던짐
+		log.info("{},{}",test1,test1.getRoles());
+		
+		Member test2 = memberRepo.findByUsername("test2").get();
+		log.info("{},{}",test2,test2.getRoles());
+	}
 	
 	
 }

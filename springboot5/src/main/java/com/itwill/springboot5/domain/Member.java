@@ -55,7 +55,7 @@ public class Member extends BaseTimeEntity {
 	private String email;
 	
 	@Builder.Default //-> 빌드 패턴에서도 null이 아닌 HashSet<>객체로 초기화 될 수 있도록 하려고 사용함.
-	//빌드 패턴에서도  = new HashSet<>();이 되게 하려고 사용함
+	//빌드 패턴에서도  = new HashSet<>();이 되게 하려고(null이 되지 않도록.nullPointerException방지하려고) 사용 함
 	@ToString.Exclude //-> toString()에서 제외시킴
 	@ElementCollection(fetch = FetchType.LAZY) //-> 연관 테이블 사용(Member_roles 테이블 사용)하기 위해서.
 	@Enumerated(EnumType.STRING) //-> DB 테이블에 저장될 때 상수(enum) 이름(문자열)을 사용하기 위해서 쓴 애너테이션
@@ -68,16 +68,18 @@ public class Member extends BaseTimeEntity {
 	//nullPointerException 발생 우려.예외 막으려고 넣음
 	//문제) 아규먼트가 있는 생성자에서 null값이 될 우려가 있음(빌드 패턴에서 null값우려 -> nullPointerException)
 	//해결) @Builder.Default 를 붙임
-	
+	//-> enum에서 정의한 값만 들어갈 수 있음
 	
 	//편의 메서드 만듬 -> 문제 없이 동작 하려면 roles값이 null이 되면 절대 안된다고 함.
 	//=> (null이면 nullPointerException발생함. null값이면 .메서드 호출 불가(참조해서 메서드를 호출할 주소가 없기 때문. null이니까))
 	public Member addRole(MemberRole role) {
+		//이런 편의 메서드 없어도 추가하고 싶으면 getRoles().add(role); 사용하면 된다고 함.
 		roles.add(role); // Set<엘리먼트타입>에 원소를 추가
 		return this;
 	}
 	
 	public Member removeRole(MemberRole role) {
+		
 		roles.remove(role); //-> Set<>에서 원소(role) 1개를 찾아서 삭제.
 		return this;
 	}
