@@ -41,7 +41,7 @@ public class MemberRepositoryTest {
 		//BCryptPasswordEncoder@18cb7c6
 	}
 	
-//	@Test
+	@Test
 	public void testSave() {
 		// 엔터티 객체를 DB members 테이블에 저장.
 //		Member m = Member.builder()
@@ -49,13 +49,18 @@ public class MemberRepositoryTest {
 //				.password(passwordEncoder.encode("1111"))
 //				.email("test1@itwill.com")
 //				.build();
+//		Member m = Member.builder()
+//				.username("test2")
+//				.password(passwordEncoder.encode("2222"))
+//				.email("test2@itwill.com")
+//				.build();
 		Member m = Member.builder()
-				.username("test2")
-				.password(passwordEncoder.encode("2222"))
-				.email("test2@itwill.com")
+				.username("admin")
+				.password(passwordEncoder.encode("admin"))
+				.email("admin@itwill.com")
 				.build();
 		
-		m.addRole(MemberRole.USER); //-> 아규먼트로 enum에서 만들었던 상수 넣음
+//		m.addRole(MemberRole.USER); //-> 아규먼트로 enum에서 만들었던 상수 넣음
 		m.addRole(MemberRole.ADMIN);
 		log.info("save 호출 전 = {},{}", m, m.getRoles());
 		//->save 호출 전 = Member(super=BaseTimeEntity(createdTime=null, modifiedTime=null), id=null, username=test2, 
@@ -80,7 +85,7 @@ public class MemberRepositoryTest {
 		list.forEach((member) -> log.info("{},{}", member, member.getRoles()));
 	}
 	
-	@Test 
+//	@Test 
 	//findByUsername() 메서드 선언 앞에 @EntityGraph(attributePaths = "roles")라고 써서
 	//@Transactional 없이도 getRoles()값도 잘 가져옴(JUnit test에 필요한 것)
 	public void testFindByUsername() {

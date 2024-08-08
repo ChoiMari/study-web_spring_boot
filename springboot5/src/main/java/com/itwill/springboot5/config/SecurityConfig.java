@@ -38,7 +38,7 @@ public class SecurityConfig {
 		//=> 다형성 리턴타입은 PasswordEncoder. 상위 타입 리턴하는건 BCryptPasswordEncoder 하위타입
 	}//-> 비밀번호 암호화 하려고 씀
 	
-	
+	/*
 	@Bean
 	UserDetailsService inMemoryUserDetailsService() {
 		//UserDetailsService -> 로그인, 로그아웃 등의 회원가입을 도와주는 서비스 인터페이스.
@@ -70,7 +70,7 @@ public class SecurityConfig {
 		//-> User 타입 객체 3개를 가지고 있는 UserDetailsService 객체를 생성하고 리턴함.
 		
 	}
-	
+	*/
 	//->UserDetailsService:  사용자 관리(로그인, 로그아웃, 회원가입 등) 을 위한 서비스 인터 페이스
 	//-> 스프링 부트 애플리케이션에서 스프링 시큐리티를 이용한 로그인, 로그아웃을 하려면
 	// 반드시 UserDetailsService(인터페이스)를 구현하는 서비스 클래스와 

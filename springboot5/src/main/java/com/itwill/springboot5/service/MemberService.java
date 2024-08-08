@@ -1,5 +1,10 @@
 package com.itwill.springboot5.service;
 
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MemberService {
+//Spring Security에서 로그인/로그아웃 처리에서 사용할 수 있도록(implements UserDetailsService 추가함)
+//하기 위해서 UserDetailsService(사용자상세정보서비스인터페이스)를 구현함
+public class MemberService implements UserDetailsService {
 	
 	private final MemberRepository memberRepo;
 	private final PasswordEncoder passwordEncoder;
@@ -40,6 +47,26 @@ public class MemberService {
 		
 		
 		return member;
+	}
+
+	@Override //implements UserDetailsService해서 구현한 메서드(오버라이드) //-> 스프링 시큐리티에서 호출해서 이용한다고 함.(로그인 과정에서)
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		//DB테이블(members)에 (이 메서드의 아규먼트로 넣어주는) username과 일치하는 사용자가 있으면
+		//UserDetails타입의 객체를 리턴하고, 그렇지 않으면 UsernameNotFoundException을 던짐. 
+		//근데 우리는 UserDetails(인터페이스)를 구현하고 있는 클래스 만든 적이 없음
+		//-> 옵션) Member(엔터티 클래스)가 implements UserDetails(UserDetails를 구현한다) ->(UserDetails에 선언되어있는) 추상메서드구현(오버라이드)
+		//-> 인터페이스에서 D(디폴트 메서드)는 바디가 구현되어져 있는 메서드. 특별한 경우에만 오버라이드하면 된다고 함
+		log.info("loadUserByUsername(username={})",username); //->로그인 양식에 적은 username값이 출력됨
+		Optional<Member> entity = memberRepo.findByUsername(username);
+		if(entity.isPresent()) {//Optional객체가 가지고 있는 메서드
+			//isPresent() : DB에 사용자가 있으면 true리턴함
+			//isEmpty() : 값이 없으면 true. 이거 써도 된다고 함.
+			return entity.get();
+		} else {
+			throw new UsernameNotFoundException( username + "과 일치하는 레코드(사용자 정보)가 없습니다.");
+			//->이 메서드를 호출 한 곳에서 예외 처리 한다고 함.
+		}
+	
 	}
 	
 }

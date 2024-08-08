@@ -1,9 +1,15 @@
 package com.itwill.springboot5.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.NaturalId;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -36,7 +42,8 @@ import lombok.ToString;
 //callSuper 속성 : 수퍼(부모)클래스의 equals(),hashCode() 메서드를 사용할 것인지 여부. - 사용할 것이면 true, 사용 X false
 @Entity
 @Table(name = "MEMBERS") //엔터티 클래스(Member)가 DB에 있는 실제 테이블 이름(MEMBERS)과 달라서 사용함.
-public class Member extends BaseTimeEntity {
+public class Member extends BaseTimeEntity implements UserDetails {
+	//엔터티 클래스가 UserDetails를 구현 함(추상메서드 오버라이드)
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -88,5 +95,42 @@ public class Member extends BaseTimeEntity {
 		roles.clear(); //-> Set<엘리먼트타입> 의 모든 원소를 전부 지움
 		return this;
 	}
+
+	@Override //implements UserDetails해서 구현한(오버라이드) 메서드
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		//Collection<? extends GrantedAuthority>(Collection은 인터페이스임)을 구현하고 있는 클래스를 리턴해야 함
+		//Collection
+		//	|__ Set, List
+		//		|__HashSet |__ArrayList 
+		
+//		//람다 표현식 안쓰는 경우
+//		ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+//		for(MemberRole r : roles) {
+//			GrantedAuthority auth = new SimpleGrantedAuthority(r.getAuthority());
+//			authorities.add(auth);
+//		} //-> Set이나 List를 생성해서 리턴해도 괜찮다고 함.
+		
+		//람다 표현식을 사용하는 경우
+//		ArrayList<GrantedAuthority> authorities = new ArrayList<>(
+//			    roles.stream()
+//			         .map(r -> new SimpleGrantedAuthority(r.getAuthority()))
+//			         .toList()
+//			);
+		List<SimpleGrantedAuthority> authorities = roles.stream()
+				.map((r)-> new SimpleGrantedAuthority(r.getAuthority()))
+						.toList(); //-> 이 코드가 제일 좋다고 함
+		
+//		List<? extends GrantedAuthority> authorities = roles.stream()
+//				.map((r)-> new SimpleGrantedAuthority(r.getAuthority()))
+//						.toList(); //-> 라고 써도 괜찮다고 함
+		
+//		ArrayList<GrantedAuthority> authorities = roles.stream()
+//			    .map(r -> new SimpleGrantedAuthority(r.getAuthority()))
+//			    .collect(Collectors.toCollection(ArrayList::new));
+		
+		return authorities;
+	}
+
+
 	
 }
