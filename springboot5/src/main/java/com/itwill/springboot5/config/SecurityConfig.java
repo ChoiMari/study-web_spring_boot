@@ -116,7 +116,9 @@ public class SecurityConfig {
 		http.formLogin((login) -> login.loginPage("/member/signin")); //-> 람다 표현식 1문장만 쓸 경우에는 {}생략 가능
 		//아큐먼트로 넣은 요청주소/member/signin는 컨트롤러 이름. /member/signin 페이지로 간다는 뜻.
 		//인증이 필요한 페이지를 /member/signin로 리다이렉트 하겠다는 뜻.
-		
+		//http.exceptionHandling(null)//-> 에러가 났을 때 어떤 페이지 보여줄건지?(에러 발생시 리다이렉트 되는 페이지 설정할 수 있다고 함)
+		//http.oauth2Login(null) -> 소셜 로그인에 사용
+		//http.logout(null) -> 로그아웃에 사용
 		//** 페이지 접근 권한, 인증 구성 : 아래의 1 또는 2 방법 중 한 가지를 선택해서 사용하면 됨.
 		// 1. HttpSecurity.authorizeHttpRequests(Customizer customizer) 메서드에서 설정
 		// -> 장점 : 한곳에서 모든 설정을 구성할 수 있음.
@@ -152,6 +154,8 @@ public class SecurityConfig {
 		);
 		
 		*/
-		return http.build(); //->리턴 타입 DefaultSecurityFilterChain(하위클래스) : SecurityFilterChain가 상위(수퍼클래스) 타입
+		
+		return http.build(); //DefaultSecurityFilterChain 타입으로 리턴함.
+		//->리턴 타입 DefaultSecurityFilterChain(하위클래스) : SecurityFilterChain가 상위(수퍼클래스) 타입
 	}
 }

@@ -146,12 +146,21 @@
         // 댓글 목록을 추가할 div 요소
         const divComments = document.querySelector('div#divComments');
         
+        //로그인 사용자 정보 ->  댓글 수정/삭제 버튼 생성 여부 결정에 사용함.(로그인 사용자와 댓글 단 사람이 같을 경우에만 보이게 설정)
+        const authUser = document.querySelector('span#authenticatedUser').innerText;
+        //<span>태그에 들은 값 가져올 때 innerText, textContent, 또는 innerHTML 중 하나를 선택하여 사용하면 됩니다.
+        //innerText와 innerHTML의 차이 : innerText는 태그 빼고 text만 가져오고,innerHTML은 span태그 사이에 또 다른 태그가 있으면 그 태그까지 가져온다고 함.
+        //결론 : innerText로 값 찾는게 낫겠다..!
+        //-> 로그인 하고 나서 span태그 안에 로그인한 id뜨게 해놨는데 그 값을 가져옴.
+        //-> 여기서 가져온 (로그인사용자id)로 비교해서 댓글 수정/삭제 버튼 보이게 처리.
+        
         let htmlStr = ''; //div에 삽입할 HTML코드(댓글 목록을 화면에 그려주는)
         //댓글 개수만큼 반복해야함
         for(let comment of data){
             //for(in) 배열에서 index(번호)를 줌
             //for(of) 배열에서 data를 줌
            // console.log(comment);
+         
            htmlStr += `
            <div class="card card-body my-3">
                 <div class="d-flex justify-content-between align-items-center">
@@ -159,21 +168,25 @@
                     <div>
                         <span class="fw-bold ms-2">${comment.writer}</span>
                         <span class="text-secondary small-text">${comment.modifiedTime}</span>
-                    </div>
-                
-                    <!-- 오른쪽에 위치한 버튼들 -->
+                    </div> `;
+            if (authUser === comment.writer) { // 로그인 사용자와 댓글 작성자가 같은 경우에만 삭제/업데이트 버튼을 만듦.
+                htmlStr += `
+                 <!-- 오른쪽에 위치한 버튼들  -->
                     <div class="ms-auto">
                         <button class="btnDelete btn btn-light btn-sm" data-id="${comment.id}">삭제</button>
                         <button class="btnUpdate btn btn-light btn-sm" data-id="${comment.id}">수정</button>
-                    </div>
-                </div>
-             <div>
+                    </div>`  
+                    }
+          htmlStr += `
+               </div>
+            <div>
                 <div class="my-3">
                     <span data-id="${comment.id}" class="p-3">${comment.ctext}</span>
                 </div>
              </div>
-           </div>`;
-        }
+           </div>`;  
+          
+        } 
         
         if(pageNo === 0){ //0일때 첫페이지일때는 새로 그리기(기존 목록 보여준 걸 다 지우고 화면에 새로 그림)
           divComments.innerHTML = htmlStr;

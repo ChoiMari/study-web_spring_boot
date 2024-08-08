@@ -48,7 +48,7 @@
                     <th:block sec:authorize="isAuthenticated()"><!-- 로그인 된 상태 -->
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/logout}">
-                                <span sec:authentication="name" class="text-secondary"></span><!-- 로그인한 아이디 : sec:authentication="name"-->
+                                <span id="authenticatedUser" sec:authentication="name" class="text-secondary"></span><!-- 로그인한 아이디 : sec:authentication="name"-->
                                 <span class="mx-1 text-primary">로그아웃</span>
                             </a>
                             <!-- 스프링 시큐리티에서 기본적으로 제공되는 로그아웃 기본 처리 요청 주소 "@{/logout}" -->

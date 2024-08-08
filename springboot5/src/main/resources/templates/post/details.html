@@ -20,7 +20,9 @@
                         <div th:text="|작성시간 : *{#temporals.format(createdTime,'yyyy-MM-dd HH:mm:ss')} , 수정시간: *{#temporals.format(modifiedTime,'yyyy-MM-dd HH:mm:ss')}|">
                         </div>
                         <!-- 수정하기 버튼 -->
-                        <a class="btn btn-sm btn-outline-dark" th:href="@{/post/modify(id=${post.id})}">수정하기</a>
+                        <!-- th:if="${post.author eq #authentication.name}"  : 
+                            포스트 작성자 아이디와 로그인 사용자 아이디가 같을 때만 버튼을 보여주게 설정함 -->
+                        <a th:if="${post.author eq #authentication.name}" class="btn btn-sm btn-outline-dark" th:href="@{/post/modify(id=${post.id})}">수정하기</a>
                     </div>
                 </div>
               </div>
@@ -44,7 +46,7 @@
                             <div class="flex-grow-1 me-2">
                                 <textarea class="form-control" id="commentText" rows="3" placeholder="댓글을 작성하세요"></textarea>
                                 <!-- 로그인 사용자 이름으로 설정 readonly 읽기 전용. d-none : 안 보이게 감춤 -->
-                                <input class="mt-2 d-none" id="commentWriter" value="admin" readonly/>
+                                <input class="mt-2 d-none" id="commentWriter" th:value="${#authentication.name}" readonly/>
                             </div>
                             <div>
                                 <button class="btn btn-outline-dark mt-5 ms-2" id="btnRegisterComment">등록</button>

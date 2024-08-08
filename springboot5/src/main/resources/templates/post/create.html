@@ -17,8 +17,10 @@
                             required 필수 입력 autofocus 커서 깜박깜박-->
                         <input required autofocus name="title" style="text-align: center;" class="form-control form-control-lg" type="text" placeholder="제목을 입력하세요.">
                         <textarea required name="content" class="form-control form-control-lg mt-4" rows="12" placeholder="내용을 작성 하세요."></textarea>
-                        <div class="d-flex justify-content-center">
-                            <input required name="author"  style="text-align: center; width: 20%;" class="mt-3 p-1" type="text" placeholder="작성자 입력">
+                        <div class="d-flex justify-content-center d-none">
+                            <input required name="author"  style="text-align: center; width: 20%;" class="mt-3 p-1" type="text" placeholder="작성자 입력"
+                                 th:value="${#authentication.name}" readonly
+                            />
                         </div>
                     </div>
                     
