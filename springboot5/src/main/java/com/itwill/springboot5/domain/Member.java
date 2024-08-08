@@ -59,7 +59,7 @@ public class Member extends BaseTimeEntity {
 	@ToString.Exclude //-> toString()에서 제외시킴
 	@ElementCollection(fetch = FetchType.LAZY) //-> 연관 테이블 사용(Member_roles 테이블 사용)하기 위해서.
 	@Enumerated(EnumType.STRING) //-> DB 테이블에 저장될 때 상수(enum) 이름(문자열)을 사용하기 위해서 쓴 애너테이션
-	private Set<MemberRole> roles = new HashSet<>();
+	private Set<MemberRole> roles = new HashSet<>(); //->roles가 null이 되지 않도록 값을 초기화 해놓음
 	//-> 1명의 멤버가(회원이) 권한을 2개 이상 가질 수 있기 때문에 타입을 Set으로 함.
 	//->또, List는 중복값 저장 가능하기 때문에 Set타입 사용(Set은 중복값 저장 X)
 	//-> 기본 생성자(모든 필드를 그 필드 타입의 기본값으로 초기화)

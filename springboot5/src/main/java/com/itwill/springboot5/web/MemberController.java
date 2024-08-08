@@ -1,5 +1,6 @@
 package com.itwill.springboot5.web;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,8 @@ public class MemberController {
 	public String signUp(MemberSignUpDto dto) { 
 		//-> 오버로딩 : 파라미터 선언이 다르면 메서드 이름이 같아도 다른 메서드로 인식함
 		log.info("POST signup(dto={})",dto);
+		//dto.setPassword(PasswordEncoder); 비빌번호 암호화 또는 서비스에서 암호화 시키던지, 하면된다고
+		// dto클래스의 toEntity클래스에서 암호화 시키는건 안된다고 함(dto클래스에서 PasswordEncoder주입받는게 문제있다고? 안된다고 함)
 		//TODO : 서비스 계층의 메서드를 호출해서 회원가입 정보들을 DB에 저장(insert)해야함
 		Member member = memberSvc.create(dto);
 		log.info("회원가입 member : {}",member);
